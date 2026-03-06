@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../../../widget/common/bottom_navigation_bar.dart';
+import '../../../widget/common/TopNavigationBar.dart';
+import '../../../widget/common/drowerRight.dart';
 import '../widget/TrendingProductCard.dart';
 import '../widget/MenuFacturers.dart';
+import '../../listpage/screens/TrendingProductList.dart';
+import '../../listpage/screens/MenufacturersList.dart';
+import '../../listpage/screens/NewProductListh.dart';
+import '../../listpage/screens/CategoryList.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -15,64 +22,39 @@ class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _trendingController = ScrollController();
   final ScrollController _menufacturersController = ScrollController();
   final ScrollController _newProductController = ScrollController();
+  final ScrollController _categoriesController = ScrollController();
 
-  void scrollTrendingLeft() {
-    _trendingController.animateTo(
-      _trendingController.offset - 220,
+  /// 🔄 Scroll functions
+  void scrollLeft(ScrollController controller) {
+    controller.animateTo(
+      controller.offset - 220,
       duration: const Duration(milliseconds: 400),
       curve: Curves.easeInOut,
     );
   }
 
-  void scrollTrendingRight() {
-    _trendingController.animateTo(
-      _trendingController.offset + 220,
-      duration: const Duration(milliseconds: 400),
-      curve: Curves.easeInOut,
-    );
-  }
-  void scrollMenufacturersLeft() {
-    _menufacturersController.animateTo(
-      _menufacturersController.offset - 220,
-      duration: const Duration(microseconds: 400),
-      curve: Curves.easeInOut,
-    );
-  }
-
-   void scrollMenufacturersRight() {
-     _menufacturersController.animateTo(
-       _menufacturersController.offset - 220,
-       duration: const Duration(microseconds: 400),
-       curve: Curves.easeInOut,
-     );
-  }
-
-
-  void scrollNewLeft() {
-    _newProductController.animateTo(
-      _newProductController.offset - 220,
+  void scrollRight(ScrollController controller) {
+    controller.animateTo(
+      controller.offset + 220,
       duration: const Duration(milliseconds: 400),
       curve: Curves.easeInOut,
     );
   }
 
-  void scrollNewRight() {
-    _newProductController.animateTo(
-      _newProductController.offset + 220,
-      duration: const Duration(milliseconds: 400),
-      curve: Curves.easeInOut,
-    );
-  }
   @override
   void dispose() {
     _trendingController.dispose();
+    _menufacturersController.dispose();
     _newProductController.dispose();
+    _categoriesController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const AppHeader(title: ""),
+      endDrawer: const DrowerRight(),
       bottomNavigationBar: const CustomBottomNav(),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -82,10 +64,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
               /// 🔍 Search Bar
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
                   height: 50,
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(color: Colors.green),
@@ -97,13 +79,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       Text(
                         "Search by brand, generic...",
                         style: TextStyle(color: Colors.grey),
-                      )
+                      ),
                     ],
                   ),
                 ),
               ),
 
-              /// 🎯 Banner Carousel
+              /// 🎯 Banner Slider
               CarouselSlider(
                 options: CarouselOptions(
                   height: 160,
@@ -119,423 +101,78 @@ class _HomeScreenState extends State<HomeScreen> {
 
               const SizedBox(height: 20),
 
-              /// 🔥 Trending Section Title
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: const [
-                        Icon(
-                          Icons.local_fire_department,
-                          color: Colors.orange,
-                        ),
-                        SizedBox(width: 6),
-                        Text(
-                          "Trending",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Text(
-                      "See all",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-              /// 🛍 Trending Product List With Arrows
-              SizedBox(
-                height: 270,
-                child: Stack(
-                  children: [
-
-                    /// Product List
-                    ListView.builder(
-                      controller: _trendingController,
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(horizontal: 40),
-                      itemCount: 5,
-                      itemBuilder: (context, index) {
-                        return const ProductCard(
-                          title: "Furoclav 250mg Tablet",
-                          price: 375,
-                          oldPrice: 500,
-                          discount: 25,
-                          image: "assets/product.png",
-                          outOfStock: true,
-                        );
-                      },
-                    ),
-
-                    /// Left Arrow
-                    Positioned(
-                      left: 0,
-                      top: 100,
-                      child: IconButton(
-                        onPressed: scrollTrendingLeft,
-                        icon: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.shade300,
-                                blurRadius: 5,
-                              ),
-                            ],
-                          ),
-                          child: const Icon(Icons.arrow_back_ios, size: 18),
-                        ),
-                      ),
-                    ),
-
-                    /// Right Arrow
-                    Positioned(
-                      right: 0,
-                      top: 100,
-                      child: IconButton(
-                        onPressed: scrollTrendingRight,
-                        icon: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.shade300,
-                                blurRadius: 5,
-                              ),
-                            ],
-                          ),
-                          child: const Icon(Icons.arrow_forward_ios, size: 18),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              /// 🔥 Trending Section
+/// 🔥 Trending Section
+sectionTitle(
+  Icons.local_fire_department,
+  "Trending",
+  "See all",
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const TrendingProductListPage()),
+    );
+  },
+),
+const SizedBox(height: 10),
+trendingProductSection(_trendingController),
 
               const SizedBox(height: 20),
 
-              // ===================Menufactuerers=================== //
-
-              /// 🔥 Menufacturers Section Title
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: const [
-                        Icon(
-                          Icons.local_fire_department,
-                          color: Colors.orange,
-                        ),
-                        SizedBox(width: 6),
-                        Text(
-                          "Menufatcurers",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Text(
-                      "Discover all",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ],
-                ),
+              /// 🏭 Manufacturers Section
+              sectionTitle(
+                Icons.factory,
+                "Manufacturers",
+                "Discover all",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => const MenufacturersListPage()),
+                  );
+                },
               ),
-
               const SizedBox(height: 10),
-
-              /// 🛍 Menufacturers List With Arrows
-              SizedBox(
-                height: 270,
-                child: Stack(
-                  children: [
-
-                    /// menufacturers List
-                    ListView.builder(
-                      controller: _menufacturersController,
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(horizontal: 40),
-                      itemCount: 5,
-                      itemBuilder: (context, index) {
-                        return const Menufacturers(
-                          image: "assets/product.png",
-                        );
-                      },
-                    ),
-
-                    /// Left Arrow
-                    Positioned(
-                      left: 0,
-                      top: 100,
-                      child: IconButton(
-                        onPressed: scrollTrendingLeft,
-                        icon: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.shade300,
-                                blurRadius: 5,
-                              ),
-                            ],
-                          ),
-                          child: const Icon(Icons.arrow_back_ios, size: 18),
-                        ),
-                      ),
-                    ),
-
-                    /// Right Arrow
-                    Positioned(
-                      right: 0,
-                      top: 100,
-                      child: IconButton(
-                        onPressed: scrollTrendingRight,
-                        icon: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.shade300,
-                                blurRadius: 5,
-                              ),
-                            ],
-                          ),
-                          child: const Icon(Icons.arrow_forward_ios, size: 18),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              manufacturerSection(_menufacturersController),
 
               const SizedBox(height: 20),
 
-
-
-              // ====================New product====================== //
-
-              const SizedBox(height: 20),
-
-              // 🔥 New product Section Title
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: const [
-                        Icon(
-                          Icons.fiber_new,
-                          color: Colors.orange,
-                        ),
-                        SizedBox(width: 6),
-                        Text(
-                          "New Products",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Text(
-                      "See all",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-              /// 🛍 New Product List With Arrows
-              SizedBox(
-                height: 270,
-                child: Stack(
-                  children: [
-
-                    /// Product List
-                    ListView.builder(
-                      controller: _newProductController,
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(horizontal: 40),
-                      itemCount: 5,
-                      itemBuilder: (context, index) {
-                        return const ProductCard(
-                          title: "Furoclav 250mg Tablet",
-                          price: 375,
-                          oldPrice: 500,
-                          discount: 25,
-                          image: "assets/product.png",
-                          outOfStock: true,
-                        );
-                      },
-                    ),
-
-                    /// Left Arrow
-                    Positioned(
-                      left: 0,
-                      top: 100,
-                      child: IconButton(
-                        onPressed: scrollNewLeft,
-                        icon: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.shade300,
-                                blurRadius: 5,
-                              ),
-                            ],
-                          ),
-                          child: const Icon(Icons.arrow_back_ios, size: 18),
-                        ),
-                      ),
-                    ),
-
-                    /// Right Arrow
-                    Positioned(
-                      right: 0,
-                      top: 100,
-                      child: IconButton(
-                        onPressed: scrollNewRight,
-                        icon: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.shade300,
-                                blurRadius: 5,
-                              ),
-                            ],
-                          ),
-                          child: const Icon(Icons.arrow_forward_ios, size: 18),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              /// 🆕 New Products
+              /// 🆕 New Products
+sectionTitle(
+  Icons.fiber_new,
+  "New Products",
+  "See all",
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const NewProductListPage()),
+    );
+  },
+),
+const SizedBox(height: 10),
+newProductSection(_newProductController),
 
               const SizedBox(height: 20),
 
-              // ===================Categories=================== //
-
-              /// 🔥 Categori Section Title
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: const [
-                        Icon(
-                          Icons.local_fire_department,
-                          color: Colors.orange,
-                        ),
-                        SizedBox(width: 6),
-                        Text(
-                          "Categories",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Text(
-                      "Discover all",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ],
-                ),
+              /// 📦 Categories
+              sectionTitle(
+                Icons.category,
+                "Categories",
+                "Discover all",
+                onPressed: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_)=> const CategoriListPage()),
+                    
+                    );
+                }
               ),
-
               const SizedBox(height: 10),
+             categorySection(_categoriesController),
 
-              /// 🛍 Categori List With Arrows
-              SizedBox(
-                height: 270,
-                child: Stack(
-                  children: [
-
-                    /// Categori List
-                    ListView.builder(
-                      controller: _menufacturersController,
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(horizontal: 40),
-                      itemCount: 5,
-                      itemBuilder: (context, index) {
-                        return const Menufacturers(
-                          image: "assets/product.png",
-                        );
-                      },
-                    ),
-
-                    /// Left Arrow
-                    Positioned(
-                      left: 0,
-                      top: 100,
-                      child: IconButton(
-                        onPressed: scrollTrendingLeft,
-                        icon: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.shade300,
-                                blurRadius: 5,
-                              ),
-                            ],
-                          ),
-                          child: const Icon(Icons.arrow_back_ios, size: 18),
-                        ),
-                      ),
-                    ),
-
-                    /// Right Arrow
-                    Positioned(
-                      right: 0,
-                      top: 100,
-                      child: IconButton(
-                        onPressed: scrollTrendingRight,
-                        icon: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.shade300,
-                                blurRadius: 5,
-                              ),
-                            ],
-                          ),
-                          child: const Icon(Icons.arrow_forward_ios, size: 18),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              const SizedBox(height: 30),
             ],
           ),
         ),
@@ -543,7 +180,204 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  /// Banner Item Widget
+  /// 🔹 Trending Product Section
+Widget trendingProductSection(ScrollController controller) {
+  return SizedBox(
+    height: 270,
+    child: Stack(
+      children: [
+        ListView.builder(
+          controller: controller,
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          itemCount: 5,
+          itemBuilder: (context, index) {
+            return ProductCard(
+              title: "Furoclav 250mg Tablet",
+              price: 375,
+              oldPrice: 500,
+              discount: 25,
+              image: "assets/product.png",
+              outOfStock: true,
+            );
+          },
+        ),
+        Positioned(
+          left: 0,
+          top: 100,
+          child: arrowButton(onTap: () => scrollLeft(controller), isLeft: true),
+        ),
+        Positioned(
+          right: 0,
+          top: 100,
+          child: arrowButton(onTap: () => scrollRight(controller), isLeft: false),
+        ),
+      ],
+    ),
+  );
+}
+
+/// 🔹 New Product Section
+Widget newProductSection(ScrollController controller) {
+  return SizedBox(
+    height: 270,
+    child: Stack(
+      children: [
+        ListView.builder(
+          controller: controller,
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          itemCount: 5,
+          itemBuilder: (context, index) {
+            return ProductCard(
+              title: "New Product ${index + 1}",
+              price: 250 + index * 50,
+              oldPrice: 300 + index * 50,
+              discount: 15,
+              image: "assets/newproduct3.jpg",
+              outOfStock: false,
+            );
+          },
+        ),
+        Positioned(
+          left: 0,
+          top: 100,
+          child: arrowButton(onTap: () => scrollLeft(controller), isLeft: true),
+        ),
+        Positioned(
+          right: 0,
+          top: 100,
+          child: arrowButton(onTap: () => scrollRight(controller), isLeft: false),
+        ),
+      ],
+    ),
+  );
+}
+
+  /// 🔹 Section Title Widget
+  Widget sectionTitle(
+    IconData icon,
+    String title,
+    String action, {
+    VoidCallback? onPressed,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: Colors.orange),
+              const SizedBox(width: 6),
+              Text(
+                title,
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          GestureDetector(
+            onTap: onPressed,
+            child: Text(
+              action,
+              style: const TextStyle(color: Colors.black),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 🔹 Manufacturer / Category Section
+  Widget manufacturerSection(ScrollController controller) {
+    return SizedBox(
+      height: 140,
+      child: Stack(
+        children: [
+          ListView.builder(
+            controller: controller,
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemCount: 5,
+            itemBuilder: (context, index) {
+              return const Menufacturers(
+                image: "assets/menufacturers1.png",
+              );
+            },
+          ),
+          Positioned(
+          left: 0,
+          top: 40,
+          child: arrowButton(onTap: () => scrollLeft(controller), isLeft: true),
+        ),
+        Positioned(
+          right: 0,
+          top: 40,
+          child: arrowButton(onTap: () => scrollRight(controller), isLeft: false),
+        ),
+        ],
+      ),
+    );
+  }
+
+
+  /// 🔹 Arrow Button
+Widget arrowButton({required VoidCallback onTap, required bool isLeft}) {
+  return IconButton(
+    onPressed: onTap,
+    icon: Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade300,
+            blurRadius: 5,
+          ),
+        ],
+      ),
+      child: Icon(
+        isLeft ? Icons.arrow_back_ios : Icons.arrow_forward_ios,
+        size: 18,
+      ),
+    ),
+  );
+}
+
+/// 🔹 Category Section
+Widget categorySection(ScrollController controller) {
+  return SizedBox(
+    height: 140,
+    child: Stack(
+      children: [
+        ListView.builder(
+          controller: controller,
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          itemCount: 5,
+          itemBuilder: (context, index) {
+            return const Menufacturers( // যদি আলাদা ক্যাটেগরি উইজেট থাকে, এখানে সেটি ব্যবহার করুন
+              image: "assets/category3.png",
+            );
+          },
+        ),
+        Positioned(
+          left: 0,
+          top: 40,
+          child: arrowButton(onTap: () => scrollLeft(controller), isLeft: true),
+        ),
+        Positioned(
+          right: 0,
+          top: 40,
+          child: arrowButton(onTap: () => scrollRight(controller), isLeft: false),
+        ),
+      ],
+    ),
+  );
+}
+
+  /// 🔹 Banner Widget
   Widget bannerItem(String image) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 5),

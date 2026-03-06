@@ -39,7 +39,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         width: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xff4e73df), Color(0xff224abe)],
+            //colors: [Color(0xff4e73df), Color(0xff224abe)],
+            colors: [Color(0xff4CAF50), Color(0xff2E7D32)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -153,7 +154,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     height: 50,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xff4e73df),
+                        backgroundColor: const Color(0xff4CAF50),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -167,7 +168,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       },
                       child: const Text(
                         "Create Account",
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
                     ),
                   ),
