@@ -102,20 +102,20 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 20),
 
               /// 🔥 Trending Section
-/// 🔥 Trending Section
-sectionTitle(
-  Icons.local_fire_department,
-  "Trending",
-  "See all",
-  onPressed: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const TrendingProductListPage()),
-    );
-  },
-),
-const SizedBox(height: 10),
-trendingProductSection(_trendingController),
+              /// 🔥 Trending Section
+              sectionTitle(
+                Icons.local_fire_department,
+                "Trending",
+                "See all",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const TrendingProductListPage()),
+                  );
+                },
+              ),
+              const SizedBox(height: 10),
+              trendingProductSection(_trendingController),
 
               const SizedBox(height: 20),
 
@@ -139,19 +139,19 @@ trendingProductSection(_trendingController),
 
               /// 🆕 New Products
               /// 🆕 New Products
-sectionTitle(
-  Icons.fiber_new,
-  "New Products",
-  "See all",
-  onPressed: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const NewProductListPage()),
-    );
-  },
-),
-const SizedBox(height: 10),
-newProductSection(_newProductController),
+              sectionTitle(
+                Icons.fiber_new,
+                "New Products",
+                "See all",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const NewProductListPage()),
+                  );
+                },
+              ),
+              const SizedBox(height: 10),
+              newProductSection(_newProductController),
 
               const SizedBox(height: 20),
 
