@@ -13,7 +13,7 @@ class AuthService {
     required String roleName,
   }) async {
 
-    final url = Uri.parse("http://127.0.0.1:8000/api/register");
+    final url = Uri.parse("http://192.168.0.104:8000/api/register");
 
     final response = await http.post(
       url,

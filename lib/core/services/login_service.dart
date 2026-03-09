@@ -30,7 +30,7 @@ class LoginService {
       String password,
       ) async {
 
-    final url = Uri.parse("http://127.0.0.1:8000/api/login");
+    final url = Uri.parse("http://192.168.0.104:8000/api/login");
 
     final response = await http.post(
       url,

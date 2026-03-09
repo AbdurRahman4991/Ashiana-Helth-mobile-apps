@@ -5,8 +5,8 @@ import 'features/home/screen/home.dart';
 import 'package:provider/provider.dart';
 import 'provider/auth_provider.dart';
 import 'provider/login_provider.dart';
-import '../core/utls/validation.dart';
 import 'package:ashianahealth_mobile_app/splash_screen.dart';
+import 'provider/home_provider.dart';
 
 void main() {
   runApp(
@@ -15,6 +15,7 @@ void main() {
         
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => LoginProvider()),
+         ChangeNotifierProvider(create: (_) => HomeProvider()),
       ],
       child: const MyApp(),
     ),
