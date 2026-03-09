@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../../config/api_config.dart';
+
 
 class AuthService {
 
@@ -13,7 +15,7 @@ class AuthService {
     required String roleName,
   }) async {
 
-    final url = Uri.parse("http://192.168.0.104:8000/api/register");
+    final url = Uri.parse("${ApiConfig.baseUrl}/register");
 
     final response = await http.post(
       url,

@@ -7,6 +7,7 @@ import '../../../widget/common/TopNavigationBar.dart';
 import '../../../widget/common/drowerRight.dart';
 import '../widget/TrendingProductCard.dart';
 import '../widget/MenuFacturers.dart';
+import '../widget/Categories.dart';
 import '../../listpage/screens/TrendingProductList.dart';
 import '../../listpage/screens/MenufacturersList.dart';
 import '../../listpage/screens/NewProductListh.dart';
@@ -26,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _menufacturersController = ScrollController();
   final ScrollController _newProductController = ScrollController();
   final ScrollController _categoriesController = ScrollController();
- 
+
 
 
   @override
@@ -106,17 +107,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
 
                     /// 🎯 Dynamic Banner Slider
-CarouselSlider(
-  options: CarouselOptions(
-    height: 160,
-    autoPlay: true,
-    enlargeCenterPage: true,
-    viewportFraction: 0.85,
-  ),
-  items: sliders.map((slider) {
-    return bannerItem(slider.image ?? "");
-  }).toList(),
-),
+                    CarouselSlider(
+                      options: CarouselOptions(
+                        height: 160,
+                        autoPlay: true,
+                        enlargeCenterPage: true,
+                        viewportFraction: 0.85,
+                      ),
+                      items: sliders.map((slider) {
+                        return bannerItem(slider.image ?? "");
+                      }).toList(),
+                    ),
 
                     const SizedBox(height: 20),
 
@@ -199,18 +200,6 @@ CarouselSlider(
   }
 
   /// 🔹 Banner Widget
-  // Widget bannerItem(String image) {
-  //   return Container(
-  //     margin: const EdgeInsets.symmetric(horizontal: 5),
-  //     decoration: BoxDecoration(
-  //       borderRadius: BorderRadius.circular(12),
-  //       image: DecorationImage(
-  //         image: NetworkImage(image),
-  //         fit: BoxFit.cover,
-  //       ),
-  //     ),
-  //   );
-  // }
   Widget bannerItem(String imageUrl) {
   return Container(
     margin: const EdgeInsets.symmetric(horizontal: 5),
@@ -236,83 +225,280 @@ CarouselSlider(
 }
 
   /// 🔹 Trending Section (আগের মতো)
+  ///
   Widget trendingProductSection(ScrollController controller) {
+    final provider = Provider.of<HomeProvider>(context);
+    final products = provider.homeData?.data?.trendingProducts ?? [];
+
     return SizedBox(
       height: 270,
-      child: ListView.builder(
-        controller: controller,
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return ProductCard(
-            title: "Furoclav 250mg Tablet",
-            price: 375,
-            oldPrice: 500,
-            discount: 25,
-            image: "assets/product.png",
-            outOfStock: true,
-          );
-        },
+      child: Stack(
+        children: [
+          ListView.builder(
+            controller: controller,
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 50), // arrow এর জন্য space
+            itemCount: products.length,
+            itemBuilder: (context, index) {
+              final product = products[index];
+              return ProductCard(
+                title: product.name ?? "",
+                price: double.parse(product.discountedPrice ?? "0"),
+                oldPrice: double.parse(product.sellingPrice ?? "0"),
+                discount: double.parse(product.discountPercent ?? "0").toInt(),
+                image: product.image ?? "",
+                outOfStock: (product.stock ?? 0) <= 0,
+              );
+            },
+          ),
+
+          /// ⬅ Left Arrow
+          Positioned(
+            left: 0,
+            top: 0,
+            bottom: 0,
+            child: Center(
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back_ios),
+                color: Colors.green,
+                onPressed: () {
+                  controller.animateTo(
+                    controller.offset - 220, // scroll distance
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                },
+              ),
+            ),
+          ),
+
+          /// ➡ Right Arrow
+          Positioned(
+            right: 0,
+            top: 0,
+            bottom: 0,
+            child: Center(
+              child: IconButton(
+                icon: const Icon(Icons.arrow_forward_ios),
+                color: Colors.green,
+                onPressed: () {
+                  controller.animateTo(
+                    controller.offset + 220,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
+
 
   /// 🔹 Manufacturer Section
+
   Widget manufacturerSection(ScrollController controller) {
+    final provider = Provider.of<HomeProvider>(context);
+    final manufacturers = provider.homeData?.data?.manufacturers ?? [];
+
     return SizedBox(
       height: 140,
-      child: ListView.builder(
-        controller: controller,
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return const Menufacturers(
-            image: "assets/menufacturers1.png",
-          );
-        },
+      child: Stack(
+        children: [
+          ListView.builder(
+            controller: controller,
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 50), // arrow জন্য space
+            itemCount: manufacturers.length,
+            itemBuilder: (context, index) {
+              final item = manufacturers[index];
+              return Menufacturers(
+                image: item.logo ?? "",
+              );
+            },
+          ),
+
+          /// ⬅ Left Arrow
+          Positioned(
+            left: 0,
+            top: 0,
+            bottom: 0,
+            child: Center(
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back_ios),
+                color: Colors.green,
+                onPressed: () {
+                  controller.animateTo(
+                    controller.offset - 220, // scroll distance
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                },
+              ),
+            ),
+          ),
+
+          /// ➡ Right Arrow
+          Positioned(
+            right: 0,
+            top: 0,
+            bottom: 0,
+            child: Center(
+              child: IconButton(
+                icon: const Icon(Icons.arrow_forward_ios),
+                color: Colors.green,
+                onPressed: () {
+                  controller.animateTo(
+                    controller.offset + 220,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  /// 🔹 New Product Section
+
+   /// 🔹 New Product Section
+
   Widget newProductSection(ScrollController controller) {
+    final provider = Provider.of<HomeProvider>(context);
+    final products = provider.homeData?.data?.newProducts ?? [];
+
     return SizedBox(
       height: 270,
-      child: ListView.builder(
-        controller: controller,
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return ProductCard(
-            title: "New Product ${index + 1}",
-            price: 250,
-            oldPrice: 300,
-            discount: 15,
-            image: "assets/newproduct3.jpg",
-            outOfStock: false,
-          );
-        },
+      child: Stack(
+        children: [
+          ListView.builder(
+            controller: controller,
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 50), // arrow জন্য space
+            itemCount: products.length,
+            itemBuilder: (context, index) {
+              final product = products[index];
+              return ProductCard(
+                title: product.name ?? "",
+                price: double.parse(product.discountedPrice ?? "0"),
+                oldPrice: double.parse(product.sellingPrice ?? "0"),
+                discount: double.parse(product.discountPercent ?? "0").toInt(),
+                image: product.image ?? "",
+                outOfStock: (product.stock ?? 0) <= 0,
+              );
+            },
+          ),
+
+          /// ⬅ Left Arrow
+          Positioned(
+            left: 0,
+            top: 0,
+            bottom: 0,
+            child: Center(
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back_ios),
+                color: Colors.green,
+                onPressed: () {
+                  controller.animateTo(
+                    controller.offset - 220,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                },
+              ),
+            ),
+          ),
+
+          /// ➡ Right Arrow
+          Positioned(
+            right: 0,
+            top: 0,
+            bottom: 0,
+            child: Center(
+              child: IconButton(
+                icon: const Icon(Icons.arrow_forward_ios),
+                color: Colors.green,
+                onPressed: () {
+                  controller.animateTo(
+                    controller.offset + 220,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
   /// 🔹 Category Section
   Widget categorySection(ScrollController controller) {
+    final provider = Provider.of<HomeProvider>(context);
+    final categories = provider.homeData?.data?.categories ?? [];
+
     return SizedBox(
       height: 140,
-      child: ListView.builder(
-        controller: controller,
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return const Menufacturers(
-            image: "assets/category3.png",
-          );
-        },
+      child: Stack(
+        children: [
+          ListView.builder(
+            controller: controller,
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 50), // arrow জন্য space
+            itemCount: categories.length,
+            itemBuilder: (context, index) {
+              final item = categories[index];
+              return Categories(
+                image: item.image ?? "",
+              );
+            },
+          ),
+
+          /// ⬅ Left Arrow
+          Positioned(
+            left: 0,
+            top: 0,
+            bottom: 0,
+            child: Center(
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back_ios),
+                color: Colors.green,
+                onPressed: () {
+                  controller.animateTo(
+                    controller.offset - 180, // scroll distance
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                },
+              ),
+            ),
+          ),
+
+          /// ➡ Right Arrow
+          Positioned(
+            right: 0,
+            top: 0,
+            bottom: 0,
+            child: Center(
+              child: IconButton(
+                icon: const Icon(Icons.arrow_forward_ios),
+                color: Colors.green,
+                onPressed: () {
+                  controller.animateTo(
+                    controller.offset + 180, // scroll distance
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
