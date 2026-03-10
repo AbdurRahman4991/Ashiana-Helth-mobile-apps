@@ -144,13 +144,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       Icons.factory,
                       "Manufacturers",
                       "Discover all",
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const MenufacturersListPage()),
-                        );
-                      },
+                      // onPressed: () {
+                      //   Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (_) => const MenufacturersListPage()),
+                      //   );
+                      // },
                     ),
                     const SizedBox(height: 10),
                     manufacturerSection(_menufacturersController),
@@ -314,9 +314,25 @@ class _HomeScreenState extends State<HomeScreen> {
             itemCount: manufacturers.length,
             itemBuilder: (context, index) {
               final item = manufacturers[index];
-              return Menufacturers(
+              print(item.id);
+              return GestureDetector(
+                onTap:(){ Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MenufacturersListPage(
+                      manufacturerId: item.id ?? 0,
+                    ),
+                   ),
+                );
+                },
+
+
+              child: Menufacturers(
+                id: item.id ?? 0,
                 image: item.logo ?? "",
+              ),
               );
+
             },
           ),
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widget/Menufacturers.dart';
+import '../widget/NewProduct.dart';
 import '../../../widget/common/bottom_navigation_bar.dart';
 import '../../../widget/common/TopNavigationBar.dart';
 
@@ -68,9 +68,9 @@ class NewProductListPage extends StatelessWidget {
             Expanded(
               child: ListView(
                 children: const [
-                  Menufacturers(),
-                  Menufacturers(),
-                  Menufacturers(),
+                   NewProduct(),
+                  NewProduct(),
+                  NewProduct(),
                 ],
               ),
             )

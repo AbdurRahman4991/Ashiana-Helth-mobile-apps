@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 
 class Menufacturers extends StatelessWidget {
 
+  final int id;
   final String image;
+  
   const Menufacturers({
     super.key,
+  
     required this.image,
+    required this.id,
   });
 
   @override

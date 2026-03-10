@@ -103,6 +103,7 @@ class Product {
     discountPercent = json['discount_percent'];
     stock = json['stock'];
     image = json['image'];
+    
   }
 }
 
@@ -113,7 +114,8 @@ class Manufacturer {
   Manufacturer({this.id, this.logo});
 
   Manufacturer.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    //id = json['id'];
+     id = int.parse(json['id'].toString());
     logo = json['logo'];
   }
 }
