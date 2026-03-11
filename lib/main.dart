@@ -8,6 +8,8 @@ import 'provider/login_provider.dart';
 import 'package:ashianahealth_mobile_app/splash_screen.dart';
 import 'provider/home_provider.dart';
 import 'provider/product_provider.dart';
+import 'provider/category_product_provider.dart';
+import 'provider/new_product_provider.dart';
 
 void main() {
   runApp(
@@ -16,8 +18,11 @@ void main() {
         
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => LoginProvider()),
-         ChangeNotifierProvider(create: (_) => HomeProvider()),
-         ChangeNotifierProvider(create: (_) => ProductProvider())
+        ChangeNotifierProvider(create: (_) => HomeProvider()),
+        ChangeNotifierProvider(create: (_) => ProductProvider()),
+        ChangeNotifierProvider(create: (_) => CategoryProductProvider()),
+        ChangeNotifierProvider(create: (_) => NewProductProvider())
+
       ],
       child: const MyApp(),
     ),

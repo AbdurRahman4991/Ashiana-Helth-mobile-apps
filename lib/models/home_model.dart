@@ -127,7 +127,8 @@ class Category {
   Category({this.id, this.image});
 
   Category.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    //id = json['id'];
+    id = int.parse(json['id'].toString());
     image = json['image'];
   }
 }

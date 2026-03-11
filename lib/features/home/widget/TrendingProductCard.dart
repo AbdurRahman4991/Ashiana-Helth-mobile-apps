@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../widget/common/add_to_bag_button.dart';
 
 class ProductCard extends StatelessWidget {
   final String title;
@@ -107,27 +108,33 @@ class ProductCard extends StatelessWidget {
                 const SizedBox(height: 8),
 
                 /// Button Widget
-                  // SizedBox(
-                  //   width: double.infinity,
-                  //   height: 36,
-                  //   child: ElevatedButton(
-                  //     onPressed: () {
-                  //       if (!outOfStock) {
-                  //         // Add to bag action
-                  //       }
-                  //     },
-                  //     style: ElevatedButton.styleFrom(
-                        
-                  //       backgroundColor: outOfStock ? Colors.red : Colors.green,
-                  //       foregroundColor: Colors.white,
-                  //       shape: RoundedRectangleBorder(
-                  //         borderRadius: BorderRadius.circular(6),
-                  //       ),
-                  //       elevation: outOfStock ? 0 : 2,
-                  //     ),
-                  //     child: Text(outOfStock ? "Out of Stock" : "Add To Bag", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500,),),
-                  //   ),
-                  // ),
+                //   SizedBox(
+                //     width: double.infinity,
+                //     height: 36,
+                //     child: ElevatedButton(
+                //       onPressed: () {
+                //         if (!outOfStock) {
+                //           // Add to bag action
+                //         }
+                //       },
+                //       style: ElevatedButton.styleFrom(
+                //
+                //         backgroundColor: outOfStock ? Colors.red : Colors.green,
+                //         foregroundColor: Colors.white,
+                //         shape: RoundedRectangleBorder(
+                //           borderRadius: BorderRadius.circular(6),
+                //         ),
+                //         elevation: outOfStock ? 0 : 2,
+                //       ),
+                //       child: Text(outOfStock ? "Out of Stock" : "Add To Bag", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500,),),
+                //     ),
+                //   ),
+                AddToBagButton(
+                  outOfStock: outOfStock,
+                  onPressed: () {
+                    print("Add to cart clicked");
+                  },
+                ),
               ],
             ),
           )

@@ -1,4 +1,5 @@
 import 'Manufacturing.dart';
+import 'category_model.dart';
 
 class Product {
   int id;
@@ -9,6 +10,7 @@ class Product {
   double discountedPrice;
   double discountPercent;          // ✅ new field
   Manufacturing manufacturing;
+  Category? category;
 
   Product({
     required this.id,
@@ -19,6 +21,7 @@ class Product {
     required this.discountedPrice,
     required this.discountPercent,   // ✅ new field
     required this.manufacturing,
+    required this.category,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -31,6 +34,8 @@ class Product {
       discountedPrice: double.parse(json['discounted_price'].toString()),
       discountPercent: double.parse(json['discount_percent'].toString()), // ✅ parse
       manufacturing: Manufacturing.fromJson(json['manufacturing']),
+      category: Category.fromJson(json['category']),
+
     );
   }
 }

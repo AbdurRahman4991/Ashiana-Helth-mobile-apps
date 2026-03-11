@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 class Categories extends StatelessWidget {
-
+  final int id;
   final String image;
+
   const Categories({
     super.key,
+    required this.id,
     required this.image,
   });
 

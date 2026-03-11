@@ -6,6 +6,7 @@ import '../../../widget/common/bottom_navigation_bar.dart';
 import '../../../widget/common/TopNavigationBar.dart';
 import '../../../widget/common/drowerRight.dart';
 import '../widget/TrendingProductCard.dart';
+import '../widget/NewProduct.dart';
 import '../widget/MenuFacturers.dart';
 import '../widget/Categories.dart';
 import '../../listpage/screens/TrendingProductList.dart';
@@ -180,13 +181,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       Icons.category,
                       "Categories",
                       "Discover all",
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const CategoriListPage()),
-                        );
-                      },
+                      // onPressed: () {
+                      //   Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (_) => const CategoriListPage()),
+                      //   );
+                      // },
                     ),
                     const SizedBox(height: 10),
                     categorySection(_categoriesController),
@@ -314,7 +315,7 @@ class _HomeScreenState extends State<HomeScreen> {
             itemCount: manufacturers.length,
             itemBuilder: (context, index) {
               final item = manufacturers[index];
-              print(item.id);
+              // print(item.id);
               return GestureDetector(
                 onTap:(){ Navigator.push(
                   context,
@@ -398,7 +399,7 @@ class _HomeScreenState extends State<HomeScreen> {
             itemCount: products.length,
             itemBuilder: (context, index) {
               final product = products[index];
-              return ProductCard(
+              return NewProductCard(
                 title: product.name ?? "",
                 price: double.parse(product.discountedPrice ?? "0"),
                 oldPrice: double.parse(product.sellingPrice ?? "0"),
@@ -469,8 +470,23 @@ class _HomeScreenState extends State<HomeScreen> {
             itemCount: categories.length,
             itemBuilder: (context, index) {
               final item = categories[index];
-              return Categories(
+
+              //print(item.id);
+              return GestureDetector(
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context)=> CategoriListPage(
+                          categoriesId: item.id ?? 0,
+                        ),
+                    ),
+                    );
+                },
+                child: Categories(
+                id: item.id ?? 0,
                 image: item.image ?? "",
+              ),
               );
             },
           ),
