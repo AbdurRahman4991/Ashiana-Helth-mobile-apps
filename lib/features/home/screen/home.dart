@@ -14,6 +14,7 @@ import '../../listpage/screens/MenufacturersList.dart';
 import '../../listpage/screens/NewProductListh.dart';
 import '../../listpage/screens/CategoryList.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import '../../../core/services/login_user_check.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -23,6 +24,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+   //int? userId;
 
   final ScrollController _trendingController = ScrollController();
   final ScrollController _menufacturersController = ScrollController();
@@ -34,10 +36,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+   // loadUserId();
+
 
     Future.microtask(() {
       Provider.of<HomeProvider>(context, listen: false).getHomeData();
     });
+    
   }
 
   /// 🔄 Scroll functions
@@ -243,6 +248,8 @@ class _HomeScreenState extends State<HomeScreen> {
             itemBuilder: (context, index) {
               final product = products[index];
               return ProductCard(
+                
+                id:product.id!,
                 title: product.name ?? "",
                 price: double.parse(product.discountedPrice ?? "0"),
                 oldPrice: double.parse(product.sellingPrice ?? "0"),
