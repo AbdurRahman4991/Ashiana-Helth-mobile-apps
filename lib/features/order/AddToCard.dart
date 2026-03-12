@@ -1,11 +1,11 @@
 
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../widget/common/bottom_navigation_bar.dart';
 import '../../../widget/common/TopNavigationBar.dart';
 import '../../../widget/common/drowerRight.dart';
-import '../../core/storage/local_storage.dart';
-
+import '../../core/services/order_service.dart';
 
 class CartItem {
   String name;
@@ -19,6 +19,24 @@ class CartItem {
     required this.qty,
     required this.image,
   });
+
+  factory CartItem.fromJson(Map<String, dynamic> json) {
+    return CartItem(
+      name: json['name'],
+      price: json['price'].toDouble(),
+      qty: 1, // প্রথমে quantity 1 ধরে নেব
+      image: json['image'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'price': price,
+      'qty': qty,
+      'image': image,
+    };
+  }
 }
 
 class BagPage extends StatefulWidget {
@@ -29,26 +47,27 @@ class BagPage extends StatefulWidget {
 }
 
 class _BagPageState extends State<BagPage> {
-  List<CartItem> items = [
-    CartItem(
-      name: "Oral Solution Alcet 60ml 2.5 mg/5 ml",
-      price: 42.5,
-      qty: 1,
-      image: "assets/product.png",
-    ),
-    CartItem(
-      name: "Tablet Kefuclav 250mg+62.5mg (16 Pcs)",
-      price: 481.6,
-      qty: 1,
-      image: "assets/product.png",
-    ),
-    CartItem(
-      name: "Tablet Furoclav 250mg (14 pcs)",
-      price: 411.6,
-      qty: 1,
-      image: "assets/product.png",
-    ),
-  ];
+  List<CartItem> items = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCartItems();
+  }
+
+  Future<void> _loadCartItems() async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String> cartData = prefs.getStringList('cart') ?? [];
+
+    List<CartItem> loadedItems = cartData.map((item) {
+      final Map<String, dynamic> jsonItem = jsonDecode(item);
+      return CartItem.fromJson(jsonItem);
+    }).toList();
+
+    setState(() {
+      items = loadedItems;
+    });
+  }
 
   double getTotal() {
     double total = 0;
@@ -56,6 +75,23 @@ class _BagPageState extends State<BagPage> {
       total += item.price * item.qty;
     }
     return total;
+  }
+
+  Future<void> _saveCartItems() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> cartData = items.map((item) => jsonEncode(item.toJson())).toList();
+    await prefs.setStringList('cart', cartData);
+  }
+
+  List getOrderItems() {
+    return items.map((item) {
+      return {
+
+        "selling_price": item.price,
+
+        "qty": item.qty
+      };
+    }).toList();
   }
 
   @override
@@ -66,41 +102,40 @@ class _BagPageState extends State<BagPage> {
       bottomNavigationBar: const CustomBottomNav(),
       body: Column(
         children: [
+          // AppHeader
+          const AppHeader(title: "My Bag"),
 
-          // ১. AppHeader
-          const AppHeader(title: ""),
-
-          // ২. Clear Bag Button
-Padding(
-  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-  child: Row(
-    mainAxisAlignment: MainAxisAlignment.end, // ডানদিকে রাখবে
-    children: [
-      ElevatedButton(
-        style: ElevatedButton.styleFrom(
-        //  backgroundColor: Colors.white, // বাটনের ব্যাকগ্রাউন্ড চাইলে দিন
-          elevation: 0,
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        ),
-        onPressed: () {
-          setState(() {
-            items.clear();
-          });
-        },
-        child: const Text(
-          "Clear Bag",
-          style: TextStyle(
-            color: Colors.red,
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
+          // Clear Bag Button
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  ),
+                  onPressed: () async {
+                    setState(() {
+                      items.clear();
+                    });
+                    await _saveCartItems(); // localstorage update
+                  },
+                  child: const Text(
+                    "Clear Bag",
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
-    ],
-  ),
-),
 
-          // ৩. Cart List
+          // Cart List
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.all(12),
@@ -117,12 +152,18 @@ Padding(
                     padding: const EdgeInsets.all(12),
                     child: Row(
                       children: [
-
                         // Image
-                        Image.asset(
+                        Image.network(
                           item.image,
                           width: 60,
                           height: 60,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Image.asset(
+                              "assets/product.png",
+                              width: 60,
+                              height: 60,
+                            );
+                          },
                         ),
 
                         const SizedBox(width: 10),
@@ -132,38 +173,31 @@ Padding(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-
                               Text(
                                 item.name,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
-
                               const SizedBox(height: 6),
-
                               Text(
                                 "৳ ${item.price} × ${item.qty} = ৳ ${(item.price * item.qty).toStringAsFixed(2)}",
                                 style: const TextStyle(color: Colors.grey),
                               ),
-
                               const SizedBox(height: 10),
-
                               Row(
                                 children: [
-
                                   // Delete Button
                                   IconButton(
                                     icon: const Icon(Icons.delete, color: Colors.red),
-                                    onPressed: () {
+                                    onPressed: () async {
                                       setState(() {
                                         items.removeAt(index);
                                       });
+                                      await _saveCartItems(); // localstorage update
                                     },
                                   ),
-
                                   const Spacer(),
-
                                   // Quantity Controls
                                   Container(
                                     decoration: BoxDecoration(
@@ -174,34 +208,31 @@ Padding(
                                       children: [
                                         IconButton(
                                           icon: const Icon(Icons.remove),
-                                          onPressed: () {
+                                          onPressed: () async {
                                             setState(() {
                                               if (item.qty > 1) item.qty--;
                                             });
+                                            await _saveCartItems(); // localstorage update
                                           },
                                         ),
-
                                         Text("${item.qty}"),
-
                                         IconButton(
                                           icon: const Icon(Icons.add, color: Colors.green),
-                                          onPressed: () {
+                                          onPressed: () async {
                                             setState(() {
                                               item.qty++;
                                             });
+                                            await _saveCartItems(); // localstorage update
                                           },
                                         ),
                                       ],
                                     ),
                                   ),
-
                                 ],
                               ),
-
                             ],
                           ),
                         ),
-
                       ],
                     ),
                   ),
@@ -210,7 +241,7 @@ Padding(
             ),
           ),
 
-          // ৪. Bottom Place Order Button
+          // Bottom Place Order Button
           Container(
             padding: const EdgeInsets.all(16),
             width: double.infinity,
@@ -220,13 +251,31 @@ Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
               ),
               onPressed: () {},
+              // onPressed: () async {
+              //
+              //   final items = getOrderItems();
+              //
+              //   bool success = await OrderService.placeOrder(
+              //     items,
+              //     userToken, // login token
+              //   );
+              //
+              //   if (success) {
+              //     ScaffoldMessenger.of(context).showSnackBar(
+              //       const SnackBar(content: Text("Order Successfully Placed")),
+              //     );
+              //   } else {
+              //     ScaffoldMessenger.of(context).showSnackBar(
+              //       const SnackBar(content: Text("Order Failed")),
+              //     );
+              //   }
+              // },
               child: Text(
                 "Place Order : ৳ ${getTotal().toStringAsFixed(2)}",
                 style: const TextStyle(fontSize: 16, color: Colors.white),
               ),
             ),
           ),
-
         ],
       ),
     );

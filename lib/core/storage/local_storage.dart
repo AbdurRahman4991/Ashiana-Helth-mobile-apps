@@ -1,5 +1,7 @@
 
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../models/cart_model.dart';
+import 'dart:convert';
 
 class LocalStorage {
 
@@ -42,4 +44,8 @@ class LocalStorage {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
   }
+
+  // Add to card
+
+
 }
