@@ -61,7 +61,6 @@ class Product {
 
   Manufacturing? manufacturing;
   Category? category;
-  int stock; // make it non-nullable with default 0
 
   Product({
     required this.id,
@@ -71,34 +70,32 @@ class Product {
     required this.sellingPrice,
     required this.discountedPrice,
     required this.discountPercent,
-
     this.manufacturing,
     this.category,
-    this.stock = 0, // default 0
-
+    this.stock = 0,
+  });
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
+      id: int.tryParse(json['id'].toString()) ?? 0,
       name: json['name'] ?? '',
       slug: json['slug'] ?? '',
       image: json['image'] ?? '',
-      sellingPrice: double.tryParse(json['selling_price'].toString()) ?? 0,
-      discountedPrice: double.tryParse(json['discounted_price'].toString()) ?? 0,
-
-      discountPercent: double.tryParse(json['discount_percent']?.toString() ?? '0') ?? 0,
-
-      discountPercent: double.tryParse(json['discount_percent'].toString()) ?? 0,
+      sellingPrice:
+          double.tryParse(json['selling_price'].toString()) ?? 0,
+      discountedPrice:
+          double.tryParse(json['discounted_price'].toString()) ?? 0,
+      discountPercent:
+          double.tryParse(json['discount_percent']?.toString() ?? '0') ?? 0,
       stock: int.tryParse(json['stock'].toString()) ?? 0,
 
       manufacturing: json['manufacturing'] != null
           ? Manufacturing.fromJson(json['manufacturing'])
           : null,
+
       category: json['category'] != null
           ? Category.fromJson(json['category'])
           : null,
-
-      stock: json['stock'] != null ? int.tryParse(json['stock'].toString()) ?? 0 : 0,
-
     );
   }
 }

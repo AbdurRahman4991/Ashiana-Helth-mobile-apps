@@ -2,6 +2,7 @@
 // import '../../../widget/common/bottom_navigation_bar.dart';
 // import '../../../widget/common/TopNavigationBar.dart';
 // import '../../../widget/common/drowerRight.dart';
+//  import '../order/invoice_page.dart';
 
 // class Order {
 //   final int invoice;
@@ -71,7 +72,19 @@
 //           /// Invoice List
 //           ...orders.map((order) {
 
-//             return Card(
+//             return 
+//             GestureDetector(
+//               onTap: (){
+//                 Navigator.push(
+//                   context,
+//                   MaterialPageRoute(
+//                     builder: (context) => const InvoicePage(),
+//                   ),
+//                   );
+//               },
+            
+            
+//             child: Card(
 //               elevation: 2,
 //               shape: RoundedRectangleBorder(
 //                 borderRadius: BorderRadius.circular(10),
@@ -165,6 +178,7 @@
 //                   ],
 //                 ),
 //               ),
+//             )
 //             );
 
 //           }).toList(),
@@ -178,21 +192,10 @@ import 'package:flutter/material.dart';
 import '../../../widget/common/bottom_navigation_bar.dart';
 import '../../../widget/common/TopNavigationBar.dart';
 import '../../../widget/common/drowerRight.dart';
-import '../order/invoice_page.dart';
 
-class Order {
-  final int invoice;
-  final String date;
-  final double amount;
-  final String status;
-
-  Order({
-    required this.invoice,
-    required this.date,
-    required this.amount,
-    required this.status,
-  });
-}
+import '../../models/order_model.dart';
+import '../../core/services/my_order_sevice.dart';
+import 'invoice_page.dart';
 
 class OrdersPage extends StatelessWidget {
   const OrdersPage({super.key});
@@ -206,155 +209,180 @@ class OrdersPage extends StatelessWidget {
       bottomNavigationBar: const CustomBottomNav(),
 
       body: FutureBuilder<List<OrderModel>>(
-        future: OrderService.fetchOrders(),
+
+        future: MyOrderService.fetchOrders(),
+
         builder: (context, snapshot) {
+
+          /// Loading
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
 
+          /// Error
           if (snapshot.hasError) {
-            return Center(child: Text("Error: ${snapshot.error}"));
+            return Center(
+              child: Text(snapshot.error.toString()),
+            );
           }
 
           final orders = snapshot.data ?? [];
 
+          /// Empty
           if (orders.isEmpty) {
-            return const Center(child: Text("No orders found."));
+            return const Center(
+              child: Text("No orders found"),
+            );
           }
 
-          return ListView.builder(
+          return ListView(
             padding: const EdgeInsets.all(16),
-            itemCount: orders.length,
-            itemBuilder: (context, index) {
-              final order = orders[index];
 
-          /// Invoice Title
-          const Text(
-            "Invoices",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+            children: [
 
-          const SizedBox(height: 12),
-
-          /// Invoice List
-          ...orders.map((order) {
-
-            return InkWell(
-                onTap: () {
-
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => InvoicePage(),
-                    ),
-                  );
-
-                },
-
-              child:Card(
-
-              elevation: 2,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+              /// Title
+              const Text(
+                "Invoices",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
 
-              margin: const EdgeInsets.only(bottom: 12),
+              const SizedBox(height: 12),
 
-              child: Padding(
-                padding: const EdgeInsets.all(16),
+              /// Orders List
+              ...orders.map((order) {
 
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                return GestureDetector(
 
-                    Expanded(
-                      child: Column(
+                  onTap: () {
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => InvoicePage(),
+                      ),
+                    );
+
+                  },
+
+                  child: Card(
+
+                    elevation: 2,
+
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+
+                    margin: const EdgeInsets.only(bottom: 12),
+
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
+
                         children: [
 
-                          Text(
-                            "Invoice: ${order.invoice}",
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                          /// Left Side
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+
+                              children: [
+
+                                Text(
+                                  "Invoice: ${order.id}",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+
+                                const SizedBox(height: 6),
+
+                                Text(
+                                  "Created: ${order.createdAt}",
+                                  style: TextStyle(
+                                    color: Colors.grey.shade700,
+                                  ),
+                                ),
+
+                                const SizedBox(height: 6),
+
+                                Row(
+                                  children: [
+
+                                    const Text("Status: "),
+
+                                    Text(
+                                      order.status,
+                                      style: const TextStyle(
+                                        color: Colors.orange,
+                                      ),
+                                    ),
+
+                                  ],
+                                ),
+
+                              ],
                             ),
                           ),
 
-                          const SizedBox(height: 6),
+                          /// Right Side
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
 
-                          Text(
-                            "Created: ${order.date}",
-                            style: TextStyle(
-                              color: Colors.grey.shade700,
-                            ),
-                          ),
-
-                          const SizedBox(height: 6),
-
-                          Row(
                             children: [
 
-                              const Text("Status: "),
-
                               Text(
-                                order.status,
+                                "৳ ${order.total.toStringAsFixed(2)}",
                                 style: const TextStyle(
-                                  color: Colors.orange,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
                                 ),
                               ),
+
+                              const SizedBox(height: 10),
+
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 4,
+                                ),
+
+                                decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+
+                                child: Text(
+                                  order.status,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                                ),
+
+                              ),
+
                             ],
-                          ),
+                          )
+
                         ],
                       ),
                     ),
+                  ),
+                );
 
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
+              }).toList(),
 
-                        Text(
-                          "৳ ${order.amount.toStringAsFixed(2)}",
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-
-                        const SizedBox(height: 10),
-
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Text(
-                            order.status,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                            ),
-                          ),
-                        )
-
-                      ],
-                    )
-
-                  ],
-                ),
-              ),
-            ),
-            );
-
-          }).toList(),
-
-        ],
+            ],
+          );
+        },
       ),
     );
   }

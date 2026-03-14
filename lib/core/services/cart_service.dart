@@ -6,12 +6,6 @@ class CartService {
 
   static const String cartKey = "cart";
 
-  // count cart item
-  // static Future<int> getCartCount() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   List<String> cart = prefs.getStringList(cartKey) ?? [];
-  //   return cart.length;
-  // }
 
   static Future<void> addToCart(CartItem item) async {
 
