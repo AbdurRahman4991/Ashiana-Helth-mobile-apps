@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../widget/common/bottom_navigation_bar.dart';
 import '../../../widget/common/TopNavigationBar.dart';
 import '../../../widget/common/drowerRight.dart';
+import '../order/invoice_page.dart';
 
 class Order {
   final int invoice;
@@ -71,7 +72,20 @@ class OrdersPage extends StatelessWidget {
           /// Invoice List
           ...orders.map((order) {
 
-            return Card(
+            return InkWell(
+                onTap: () {
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => InvoicePage(),
+                    ),
+                  );
+
+                },
+
+              child:Card(
+
               elevation: 2,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
@@ -165,6 +179,7 @@ class OrdersPage extends StatelessWidget {
                   ],
                 ),
               ),
+            ),
             );
 
           }).toList(),

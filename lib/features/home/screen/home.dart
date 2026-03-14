@@ -407,6 +407,7 @@ class _HomeScreenState extends State<HomeScreen> {
             itemBuilder: (context, index) {
               final product = products[index];
               return NewProductCard(
+                id:product.id!,
                 title: product.name ?? "",
                 price: double.parse(product.discountedPrice ?? "0"),
                 oldPrice: double.parse(product.sellingPrice ?? "0"),

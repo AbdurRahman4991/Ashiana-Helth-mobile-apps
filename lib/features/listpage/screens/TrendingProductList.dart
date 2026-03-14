@@ -273,6 +273,7 @@ class _TrendingProductListPageState extends State<TrendingProductListPage> {
                   final product = productsToShow[index];
 
                   return ProductCard(
+                    id:product.id!,
                     title: product.name ?? "",
                     image: product.image ?? "",
                     price:
