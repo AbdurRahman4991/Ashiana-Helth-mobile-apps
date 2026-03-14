@@ -7,37 +7,128 @@ import '../../../widget/common/TopNavigationBar.dart';
 import '../../../widget/common/drowerRight.dart';
 import '../../core/services/order_service.dart';
 
+// class CartItem {
+//   String name;
+//   double price;
+//   int qty;
+//   String image;
+//   String userId;
+
+//   CartItem({
+//     required this.name,
+//     required this.price,
+//     required this.qty,
+//     required this.image,
+//     required this.userId,
+//   });
+
+//   factory CartItem.fromJson(Map<String, dynamic> json) {
+//     return CartItem(
+//       name: json['name'],
+//       price: json['price'].toDouble(),
+//       qty: 1, // প্রথমে quantity 1 ধরে নেব
+//       image: json['image'],
+//       userId: json['id'].toString(),
+//     );
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     return {
+//       'name': name,
+//       'price': price,
+//       'qty': qty,
+//       'image': image,
+//       'id': userId
+//     };
+//   }
+// }
 class CartItem {
   String name;
   double price;
   int qty;
   String image;
+  String userId;       // keep String
+  String productId;    // keep String
+  double discountPercent;  // numeric
 
   CartItem({
     required this.name,
     required this.price,
     required this.qty,
     required this.image,
+    required this.userId,
+    required this.productId,
+    required this.discountPercent,
   });
 
   factory CartItem.fromJson(Map<String, dynamic> json) {
     return CartItem(
-      name: json['name'],
-      price: json['price'].toDouble(),
-      qty: 1, // প্রথমে quantity 1 ধরে নেব
-      image: json['image'],
+      name: json['name'].toString(),
+      price: (json['price'] ?? 0).toDouble(),
+      qty: (json['qty'] ?? 1),
+      image: json['image'].toString(),
+      userId: json['user_id'].toString(),
+      productId: json['product_id'].toString(),
+      discountPercent: (json['discount_percent'] ?? 0).toDouble(),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'name': name,
-      'price': price,
-      'qty': qty,
-      'image': image,
+      "user_id": userId,
+      "product_id": productId,
+      "name": name,
+      "price": price,
+      "qty": qty,
+      "image": image,
+      'discount_percent': discountPercent,
     };
   }
 }
+
+// class CartItem {
+//   String name;
+//   double price;
+//   int qty;
+//   String image;
+//   String userId;
+//   String productId;
+//   String discountPercent;
+
+//   CartItem({
+//     required this.name,
+//     required this.price,
+//     required this.qty,
+//     required this.image,
+//     required this.userId,
+//     required this.productId,
+//     required this.discountPercent,
+//   });
+
+//   factory CartItem.fromJson(Map<String, dynamic> json) {
+//     return CartItem(
+//       name: json['name'],
+//       price: (json['price']).toDouble(),
+//       qty: json['qty'] ?? 1,
+//       image: json['image'],
+//       userId: json['user_id'].toString(),
+//       productId: json['product_id'].toString(),
+//       discountPercent: (json['discountPercent'] ?? 0).toDouble(),
+//     );
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     return {
+//       "user_id": userId,
+//       "product_id": productId,
+//       "name": name,
+//       "price": price,
+//       "qty": qty,
+//       "image": image,
+//       'discount_percent': discountPercent
+//     };
+//   }
+// }
 
 class BagPage extends StatefulWidget {
   const BagPage({super.key});
@@ -83,16 +174,27 @@ class _BagPageState extends State<BagPage> {
     await prefs.setStringList('cart', cartData);
   }
 
+  // List getOrderItems() {
+  //   return items.map((item) {
+  //     return {
+
+  //       "selling_price": item.price,
+
+  //       "qty": item.qty
+  //     };
+  //   }).toList();
+  // }
+
   List getOrderItems() {
-    return items.map((item) {
-      return {
-
-        "selling_price": item.price,
-
-        "qty": item.qty
-      };
-    }).toList();
-  }
+  return items.map((item) {
+    return {
+      "product_id": item.productId,
+      "selling_price": item.price,
+      "qty": item.qty,
+      "discount_percent": item.discountPercent ?? 0,
+    };
+  }).toList();
+}
 
   @override
   Widget build(BuildContext context) {
@@ -175,10 +277,18 @@ class _BagPageState extends State<BagPage> {
                             children: [
                               Text(
                                 item.name,
+                                
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
+                                  Text(
+      "ID: ${item.productId}",
+      style: const TextStyle(
+        color: Colors.grey,
+        fontSize: 12,
+      ),
+    ),
                               const SizedBox(height: 6),
                               Text(
                                 "৳ ${item.price} × ${item.qty} = ৳ ${(item.price * item.qty).toStringAsFixed(2)}",
@@ -250,26 +360,31 @@ class _BagPageState extends State<BagPage> {
                 backgroundColor: Colors.green,
                 padding: const EdgeInsets.symmetric(vertical: 16),
               ),
-              onPressed: () {},
-              // onPressed: () async {
-              //
-              //   final items = getOrderItems();
-              //
-              //   bool success = await OrderService.placeOrder(
-              //     items,
-              //     userToken, // login token
-              //   );
-              //
-              //   if (success) {
-              //     ScaffoldMessenger.of(context).showSnackBar(
-              //       const SnackBar(content: Text("Order Successfully Placed")),
-              //     );
-              //   } else {
-              //     ScaffoldMessenger.of(context).showSnackBar(
-              //       const SnackBar(content: Text("Order Failed")),
-              //     );
-              //   }
-              // },
+             // onPressed: () {},
+              onPressed: () async {
+
+  final prefs = await SharedPreferences.getInstance();
+  String userToken = prefs.getString("token") ?? "";
+  int userId = prefs.getInt("user_id") ?? 0;
+
+  final orderItems = getOrderItems();
+
+bool success = await OrderService().placeOrder(orderItems);
+
+  if (success) {
+     setState(() {
+                      items.clear();
+                    });
+                    await _saveCartItems(); // localstorage update
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Order Successfully Placed")),
+    );
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Order Failed")),
+    );
+  }
+},
               child: Text(
                 "Place Order : ৳ ${getTotal().toStringAsFixed(2)}",
                 style: const TextStyle(fontSize: 16, color: Colors.white),

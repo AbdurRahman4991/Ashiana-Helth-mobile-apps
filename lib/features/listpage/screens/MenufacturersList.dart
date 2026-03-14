@@ -98,7 +98,8 @@ class _MenufacturersListPageState extends State<MenufacturersListPage> {
                         return Menufacturers(
                           image: product.image,
                           name: product.name,
-                          manufacturerName: product.manufacturing.name,
+                          
+                          manufacturerName: product.manufacturing?.name ?? '',
                           sellingPrice: product.sellingPrice,
                           discountedPrice: product.discountedPrice,
                           discountPercent: product.discountPercent,

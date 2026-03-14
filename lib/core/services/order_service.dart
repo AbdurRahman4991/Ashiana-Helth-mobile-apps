@@ -1,30 +1,35 @@
-
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../../config/api_config.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OrderService {
 
-  static Future<bool> placeOrder(
-      int userId, List items, String token) async {
+  final Uri url = Uri.parse("${ApiConfig.baseUrl}/orders");
+
+  Future<bool> placeOrder(List items) async {
+    // get token from SharedPreferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString("token");
+
+    // print("TOKEN: $token");
+    // print("ITEMS: $items");
 
     final response = await http.post(
-      Uri.parse("${ApiConfig.baseUrl}/orders"),
+      url,
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer $token"
+        "Authorization": "Bearer $token",
+        "Accept": "application/json",
       },
       body: jsonEncode({
-        "user_id": userId,
         "items": items
       }),
     );
 
-    if (response.statusCode == 201) {
-      return true;
-    } else {
-      print(response.body);
-      return false;
-    }
+    // print("STATUS: ${response.statusCode}");
+    // print("BODY: ${response.body}");
+
+    return response.statusCode == 201;
   }
 }

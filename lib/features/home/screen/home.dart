@@ -14,9 +14,10 @@ import '../../listpage/screens/MenufacturersList.dart';
 import '../../listpage/screens/NewProductListh.dart';
 import '../../listpage/screens/CategoryList.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../../../core/services/login_user_check.dart';
+import '../../../features/home/screen/search.dart';
 
 class HomeScreen extends StatefulWidget {
+  
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
@@ -99,18 +100,35 @@ class _HomeScreenState extends State<HomeScreen> {
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(color: Colors.green),
                         ),
-                        child: const Row(
+                        child: Row(
                           children: [
-                            Icon(Icons.search, color: Colors.green),
-                            SizedBox(width: 10),
-                            Text(
-                              "Search by brand, generic...",
-                              style: TextStyle(color: Colors.grey),
+                            const Icon(Icons.search, color: Colors.green),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: 
+
+                            TextField(
+                              decoration: const InputDecoration(
+                                hintText: "Search by brand, generic...",
+                                border: InputBorder.none,
+                              ),
+                              onChanged: (value) {
+                                if (value.length >= 3) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => SearchPage(searchText: value),
+                                    ),
+                                  );
+                                }
+                              },
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
+                  ),
+                    
 
                     /// 🎯 Dynamic Banner Slider
                     CarouselSlider(
@@ -407,6 +425,7 @@ class _HomeScreenState extends State<HomeScreen> {
             itemBuilder: (context, index) {
               final product = products[index];
               return NewProductCard(
+                id:product.id!,
                 title: product.name ?? "",
                 price: double.parse(product.discountedPrice ?? "0"),
                 oldPrice: double.parse(product.sellingPrice ?? "0"),

@@ -10,6 +10,7 @@ import 'provider/home_provider.dart';
 import 'provider/product_provider.dart';
 import 'provider/category_product_provider.dart';
 import 'provider/new_product_provider.dart';
+import 'provider/search_provider.dart';
 
 void main() {
   runApp(
@@ -21,7 +22,8 @@ void main() {
         ChangeNotifierProvider(create: (_) => HomeProvider()),
         ChangeNotifierProvider(create: (_) => ProductProvider()),
         ChangeNotifierProvider(create: (_) => CategoryProductProvider()),
-        ChangeNotifierProvider(create: (_) => NewProductProvider())
+        ChangeNotifierProvider(create: (_) => NewProductProvider()),
+        ChangeNotifierProvider(create: (_) => SearchProvider())
 
       ],
       child: const MyApp(),
