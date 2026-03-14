@@ -136,6 +136,8 @@
 
 import 'package:flutter/material.dart';
 import '../../../models/product_model.dart';
+import '../../../models/cart_model.dart';
+import '../../../core/services/cart_service.dart';
 
 class Categories extends StatelessWidget {
 
@@ -258,20 +260,56 @@ class Categories extends StatelessWidget {
             ),
           ),
 
+          // ElevatedButton(
+          //   onPressed: () {},
+          //   style: ElevatedButton.styleFrom(
+          //     backgroundColor: Colors.green,
+          //     foregroundColor: Colors.white,
+          //     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          //     textStyle: const TextStyle(
+          //         fontSize: 12, fontWeight: FontWeight.w500),
+          //     shape: RoundedRectangleBorder(
+          //       borderRadius: BorderRadius.circular(6),
+          //     ),
+          //   ),
+          //   child: const Text("Add To Bag"),
+          // )
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () async {
+
+              CartItem cartItem = CartItem(
+                userId: 15,
+                productId: product.id,
+                name: product.name,
+                price: product.discountedPrice,
+                image: "http://10.0.2.2:8000/storage/products/${product.image}",
+              );
+
+              await CartService.addToCart(cartItem);
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Added to Cart")),
+              );
+
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.green,
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               textStyle: const TextStyle(
-                  fontSize: 12, fontWeight: FontWeight.w500),
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6),
               ),
+              elevation: 2,
             ),
             child: const Text("Add To Bag"),
-          )
+          ),
+
+
+
         ],
       ),
     );

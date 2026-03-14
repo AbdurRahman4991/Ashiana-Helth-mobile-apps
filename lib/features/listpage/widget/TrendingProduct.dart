@@ -1,7 +1,14 @@
 
 import 'package:flutter/material.dart';
+import '../../../widget/common/add_to_bag_button.dart';
+import '../../../core/services/cart_service.dart';
+import '../../../core/services/ cart_counter.dart';
+import '../../../models/cart_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class ProductCard extends StatelessWidget {
+  final int id;
   final String title;
   final double price;
   final double oldPrice;
@@ -11,6 +18,7 @@ class ProductCard extends StatelessWidget {
 
   const ProductCard({
     super.key,
+    required this.id,
     required this.title,
     required this.price,
     required this.oldPrice,
@@ -96,16 +104,32 @@ class ProductCard extends StatelessWidget {
                 ),
 
                 const SizedBox(height: 8),
+                /// Button Widget
+                AddToBagButton(
+                  outOfStock: outOfStock,
+                  onPressed: () async {
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    String? userIdString = prefs.getString('id'); // লগইন ইউজারের আইডি
 
-                ElevatedButton(
-                  onPressed: outOfStock ? null : () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                    outOfStock ? Colors.red : Colors.green,
-                    foregroundColor: Colors.white,
-                  ),
-                  child: Text(outOfStock ? "Out of Stock" : "Add To Bag"),
-                )
+                    if (userIdString != null) {
+                      int userId = int.parse(userIdString); // String থেকে int-এ রূপান্তর
+
+                      CartItem item = CartItem(
+                        userId: userId, // এখন int টাইপ
+                        productId: id,
+                        name: title,
+                        price: price,
+                        image: image,
+                      );
+
+                      await CartService.addToCart(item);
+                      print("Product added to cart");
+                      cartCounter.value++;
+                    } else {
+                      print("User not logged in");
+                    }
+                  },
+                ),
               ],
             ),
           )

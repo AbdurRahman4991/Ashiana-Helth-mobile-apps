@@ -1,10 +1,8 @@
 
 import 'package:flutter/material.dart';
 import '../../../models/product_model.dart';
-import '../../../widget/common/add_to_bag_button.dart';
-import '../../../core/services/cart_service.dart';
 import '../../../models/cart_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../../core/services/cart_service.dart';
 
 class NewProduct extends StatelessWidget {
   final Product product; // dynamic data
@@ -113,14 +111,31 @@ class NewProduct extends StatelessWidget {
 
           /// Button
           ElevatedButton(
-            onPressed: () {
-              // Add to bag action
+            onPressed: () async {
+
+              CartItem cartItem = CartItem(
+                userId: 15,
+                productId: product.id,
+                name: product.name,
+                price: product.discountedPrice,
+                image: "http://10.0.2.2:8000/storage/products/${product.image}",
+              );
+
+              await CartService.addToCart(cartItem);
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Added to Cart")),
+              );
+
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.green,
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+              textStyle: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6),
               ),
@@ -128,6 +143,8 @@ class NewProduct extends StatelessWidget {
             ),
             child: const Text("Add To Bag"),
           ),
+
+
         ],
       ),
     );

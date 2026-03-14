@@ -95,15 +95,14 @@ class _MenufacturersListPageState extends State<MenufacturersListPage> {
 
                         final product = provider.products[index];
 
-                        return Menufacturers(
-                          image: product.image,
-                          name: product.name,
-                          
-                          manufacturerName: product.manufacturing?.name ?? '',
-                          sellingPrice: product.sellingPrice,
-                          discountedPrice: product.discountedPrice,
-                          discountPercent: product.discountPercent,
-                        );
+                        // return Menufacturers(
+                        //   image: product.image,
+                        //   name: product.name,
+                        //   manufacturerName: product.manufacturing.name,
+                        //   sellingPrice: product.sellingPrice,
+                        //   discountedPrice: product.discountedPrice,
+                        //   discountPercent: product.discountPercent,
+                        // );
                       },
                     ),
             )

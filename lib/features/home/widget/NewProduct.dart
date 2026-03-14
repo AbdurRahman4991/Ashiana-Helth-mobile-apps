@@ -112,38 +112,32 @@ class NewProductCard extends StatelessWidget {
 
                 const SizedBox(height: 8),
 
-                
-                 /// Button Widget
-                AddToBagButton(
-                  outOfStock: outOfStock,
-                  onPressed: () async {
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
-                    String? userIdString = prefs.getString('id'); // লগইন ইউজারের আইডি
+                /// Button Widget
 
-                    if (userIdString != null) {
-                      int userId = int.parse(userIdString); // String থেকে int-এ রূপান্তর
+                  AddToBagButton(
+                    outOfStock: outOfStock,
+                    onPressed: () async {
+                      SharedPreferences prefs = await SharedPreferences.getInstance();
+                      String? userIdString = prefs.getString('id'); // লগইন ইউজারের আইডি
 
-                      CartItem item = CartItem(
-                        userId: userId, // এখন int টাইপ
-                        productId: id,
-                        name: title,
-                        price: price,
-                        image: image,
-                      );
+                      if (userIdString != null) {
+                        int userId = int.parse(userIdString); // String থেকে int-এ রূপান্তর
 
-                      await CartService.addToCart(item);
-                      print("Product added to cart");
-                    } else {
-                      print("User not logged in");
-                    }
-                  },
-                ),
-                // AddToBagButton(
-                //   outOfStock: outOfStock,
-                //   onPressed: () {
-                //     print("Add to cart clicked");
-                //   },
-                // ),
+                        CartItem item = CartItem(
+                          userId: userId, // এখন int টাইপ
+                          productId: id!,
+                          name: title,
+                          price: price,
+                          image: image,
+                        );
+
+                        await CartService.addToCart(item);
+                        print("Product added to cart");
+                      } else {
+                        print("User not logged in");
+                      }
+                    },
+                  ),
               ],
             ),
           )

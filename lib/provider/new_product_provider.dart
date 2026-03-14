@@ -16,6 +16,7 @@ class NewProductProvider extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
+
     try {
       _products = await _service.fetchNewProducts();
     } catch (e) {
