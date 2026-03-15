@@ -49,6 +49,7 @@
 import 'Manufacturing.dart';
 import 'category_model.dart';
 
+
 class Product {
   int id;
   String name;

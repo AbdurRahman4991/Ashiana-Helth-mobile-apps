@@ -6,42 +6,8 @@ import '../../../widget/common/bottom_navigation_bar.dart';
 import '../../../widget/common/TopNavigationBar.dart';
 import '../../../widget/common/drowerRight.dart';
 import '../../core/services/order_service.dart';
+import '../../core/services/cart_service.dart';
 
-// class CartItem {
-//   String name;
-//   double price;
-//   int qty;
-//   String image;
-//   String userId;
-
-//   CartItem({
-//     required this.name,
-//     required this.price,
-//     required this.qty,
-//     required this.image,
-//     required this.userId,
-//   });
-
-//   factory CartItem.fromJson(Map<String, dynamic> json) {
-//     return CartItem(
-//       name: json['name'],
-//       price: json['price'].toDouble(),
-//       qty: 1, // প্রথমে quantity 1 ধরে নেব
-//       image: json['image'],
-//       userId: json['id'].toString(),
-//     );
-//   }
-
-//   Map<String, dynamic> toJson() {
-//     return {
-//       'name': name,
-//       'price': price,
-//       'qty': qty,
-//       'image': image,
-//       'id': userId
-//     };
-//   }
-// }
 class CartItem {
   String name;
   double price;
@@ -85,50 +51,6 @@ class CartItem {
     };
   }
 }
-
-// class CartItem {
-//   String name;
-//   double price;
-//   int qty;
-//   String image;
-//   String userId;
-//   String productId;
-//   String discountPercent;
-
-//   CartItem({
-//     required this.name,
-//     required this.price,
-//     required this.qty,
-//     required this.image,
-//     required this.userId,
-//     required this.productId,
-//     required this.discountPercent,
-//   });
-
-//   factory CartItem.fromJson(Map<String, dynamic> json) {
-//     return CartItem(
-//       name: json['name'],
-//       price: (json['price']).toDouble(),
-//       qty: json['qty'] ?? 1,
-//       image: json['image'],
-//       userId: json['user_id'].toString(),
-//       productId: json['product_id'].toString(),
-//       discountPercent: (json['discountPercent'] ?? 0).toDouble(),
-//     );
-//   }
-
-//   Map<String, dynamic> toJson() {
-//     return {
-//       "user_id": userId,
-//       "product_id": productId,
-//       "name": name,
-//       "price": price,
-//       "qty": qty,
-//       "image": image,
-//       'discount_percent': discountPercent
-//     };
-//   }
-// }
 
 class BagPage extends StatefulWidget {
   const BagPage({super.key});
@@ -174,17 +96,6 @@ class _BagPageState extends State<BagPage> {
     await prefs.setStringList('cart', cartData);
   }
 
-  // List getOrderItems() {
-  //   return items.map((item) {
-  //     return {
-
-  //       "selling_price": item.price,
-
-  //       "qty": item.qty
-  //     };
-  //   }).toList();
-  // }
-
   List getOrderItems() {
   return items.map((item) {
     return {
@@ -223,6 +134,7 @@ class _BagPageState extends State<BagPage> {
                       items.clear();
                     });
                     await _saveCartItems(); // localstorage update
+                    await CartService.clearCart();
                   },
                   child: const Text(
                     "Clear Bag",
@@ -283,12 +195,12 @@ class _BagPageState extends State<BagPage> {
                                 ),
                               ),
                                   Text(
-      "ID: ${item.productId}",
-      style: const TextStyle(
-        color: Colors.grey,
-        fontSize: 12,
-      ),
-    ),
+                                "ID: ${item.productId}",
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                ),
+                              ),
                               const SizedBox(height: 6),
                               Text(
                                 "৳ ${item.price} × ${item.qty} = ৳ ${(item.price * item.qty).toStringAsFixed(2)}",
@@ -305,6 +217,7 @@ class _BagPageState extends State<BagPage> {
                                         items.removeAt(index);
                                       });
                                       await _saveCartItems(); // localstorage update
+                                      CartService.cartCount.value = items.length;
                                     },
                                   ),
                                   const Spacer(),
@@ -362,29 +275,30 @@ class _BagPageState extends State<BagPage> {
               ),
              // onPressed: () {},
               onPressed: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  String userToken = prefs.getString("token") ?? "";
+                  int userId = prefs.getInt("user_id") ?? 0;
 
-  final prefs = await SharedPreferences.getInstance();
-  String userToken = prefs.getString("token") ?? "";
-  int userId = prefs.getInt("user_id") ?? 0;
+                  final orderItems = getOrderItems();
 
-  final orderItems = getOrderItems();
+                bool success = await OrderService().placeOrder(orderItems);
 
-bool success = await OrderService().placeOrder(orderItems);
-
-  if (success) {
-     setState(() {
+                  if (success) {
+                     setState(() {
                       items.clear();
                     });
                     await _saveCartItems(); // localstorage update
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Order Successfully Placed")),
-    );
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Order Failed")),
-    );
-  }
-},
+                      await CartService.clearCart();
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Order Successfully Placed")),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Order Failed")),
+                    );
+                  }
+                },
               child: Text(
                 "Place Order : ৳ ${getTotal().toStringAsFixed(2)}",
                 style: const TextStyle(fontSize: 16, color: Colors.white),

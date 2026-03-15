@@ -263,7 +263,7 @@ class OrdersPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => InvoicePage(),
+                        builder: (_) => InvoicePage(orderId: order.id),
                       ),
                     );
 

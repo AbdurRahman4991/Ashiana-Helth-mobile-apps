@@ -1,10 +1,13 @@
+import 'product_model.dart';
 class OrderItem {
+
   final int id;
   final int productId;
   final double sellingPrice;
   final double discountPercent;
   final double discountedPrice;
   final int qty;
+  final Product? product;
 
   OrderItem({
     required this.id,
@@ -13,6 +16,7 @@ class OrderItem {
     required this.discountPercent,
     required this.discountedPrice,
     required this.qty,
+    this.product,
   });
 
   factory OrderItem.fromJson(Map<String, dynamic> json) {
@@ -23,6 +27,9 @@ class OrderItem {
       discountPercent: double.parse(json['discount_percent'].toString()),
       discountedPrice: double.parse(json['discounted_price'].toString()),
       qty: json['qty'],
+      product: json['product'] != null
+          ? Product.fromJson(json['product'])
+          : null,
     );
   }
 }
