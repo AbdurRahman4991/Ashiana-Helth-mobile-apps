@@ -39,7 +39,7 @@ class Menufacturers extends StatelessWidget {
                 height: 100,
                 width: double.infinity,
                 padding: const EdgeInsets.all(10),
-                child: Image.asset(image, fit: BoxFit.contain),
+                child: Image.network(image, fit: BoxFit.contain),
               ),
             ],
           ),

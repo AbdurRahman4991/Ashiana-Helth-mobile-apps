@@ -3,6 +3,12 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../provider/order_detail_provider.dart';
 import '../../models/order_model.dart';
+import '../../provider/invoice_provider.dart';
+
+import 'package:path_provider/path_provider.dart';
+import 'package:open_file/open_file.dart';
+import 'dart:io';
+import 'package:provider/provider.dart';
 
 class InvoicePage extends StatelessWidget {
   final int orderId; // Required to fetch order
@@ -101,17 +107,51 @@ class InvoicePage extends StatelessWidget {
 
                 SizedBox(
                   width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                    ),
-                    onPressed: () {
-                      print("Download Invoice");
+                  child: Consumer<InvoiceProvider>(
+                    builder: (context, provider, _) {
+                      return ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                        ),
+                        onPressed: provider.isLoading
+                            ? null
+                            : () async {
+                          final bytes = await provider.downloadInvoice(orderId);
+                          if (bytes != null) {
+                            final dir = await getApplicationDocumentsDirectory();
+                            final file = File("${dir.path}/invoice_$orderId.pdf");
+                            await file.writeAsBytes(bytes);
+                            OpenFile.open(file.path);
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Failed to download invoice"),
+                              ),
+                            );
+                          }
+                        },
+                        child: provider.isLoading
+                            ? const CircularProgressIndicator(color: Colors.white)
+                            : const Text("Download Invoice"),
+                      );
                     },
-                    child: const Text("Download Invoice"),
                   ),
                 ),
+
+                // SizedBox(
+                //   width: double.infinity,
+                //   child: ElevatedButton(
+                //     style: ElevatedButton.styleFrom(
+                //       backgroundColor: Colors.green,
+                //       padding: const EdgeInsets.symmetric(vertical: 14),
+                //     ),
+                //     onPressed: () {
+                //       print("Download Invoice");
+                //     },
+                //     child: const Text("Download Invoice"),
+                //   ),
+                // ),
               ],
             ),
           );
@@ -156,7 +196,7 @@ class InvoicePage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
                 image: DecorationImage(
                   image: NetworkImage(
-                      "http://127.0.0.1:8000/storage/products/${item.product?.image ?? 'default.png'}"),
+                      "https://demoapp.ashianahealth.com/storage/products/${item.product?.image ?? 'default.png'}"),
                   fit: BoxFit.cover,
                 ),
               ),

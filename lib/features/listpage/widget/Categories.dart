@@ -175,7 +175,7 @@ class Categories extends StatelessWidget {
                 height: 90,
                 padding: const EdgeInsets.all(8),
                 child: Image.network(
-                  "http://127.0.0.1:8000/uploads/${product.image}",
+                  "https://demoapp.ashianahealth.com/storage/products/${product.image}",
                   fit: BoxFit.cover,
                 ),
               ),
@@ -282,7 +282,7 @@ class Categories extends StatelessWidget {
                 productId: product.id,
                 name: product.name,
                 price: product.discountedPrice,
-                image: "http://10.0.2.2:8000/storage/products/${product.image}",
+                image: "https://demoapp.ashianahealth.com/storage/products/${product.image}",
               );
 
               await CartService.addToCart(cartItem);

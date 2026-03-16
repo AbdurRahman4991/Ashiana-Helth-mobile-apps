@@ -36,7 +36,7 @@ class NewProduct extends StatelessWidget {
                 padding: const EdgeInsets.all(8),
                 child: Image.network(
                   product.image.isNotEmpty
-                      ? "http://127.0.0.1:8000/storage/${product.image}"
+                      ? "https://demoapp.ashianahealth.com/storage/products/${product.image}"
                       : "https://via.placeholder.com/90",
                   fit: BoxFit.cover,
                 ),
@@ -118,7 +118,7 @@ class NewProduct extends StatelessWidget {
                 productId: product.id,
                 name: product.name,
                 price: product.discountedPrice,
-                image: "http://10.0.2.2:8000/storage/products/${product.image}",
+                image: "https://demoapp.ashianahealth.com/storage/products/${product.image}",
               );
 
               await CartService.addToCart(cartItem);

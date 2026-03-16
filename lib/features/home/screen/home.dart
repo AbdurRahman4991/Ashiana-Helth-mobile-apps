@@ -15,6 +15,7 @@ import '../../listpage/screens/NewProductListh.dart';
 import '../../listpage/screens/CategoryList.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../../features/home/screen/search.dart';
+import '../../../config/api_config.dart';
 
 class HomeScreen extends StatefulWidget {
   
@@ -273,6 +274,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 oldPrice: double.parse(product.sellingPrice ?? "0"),
                 discount: double.parse(product.discountPercent ?? "0").toInt(),
                 image: product.image ?? "",
+                // image: product.image != null
+                //     ? ApiConfig.productImage(product.image!)
+                //     : "",
                 outOfStock: (product.stock ?? 0) <= 0,
               );
             },
@@ -356,6 +360,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Menufacturers(
                 id: item.id ?? 0,
                 image: item.logo ?? "",
+
               ),
               );
 
@@ -431,6 +436,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 oldPrice: double.parse(product.sellingPrice ?? "0"),
                 discount: double.parse(product.discountPercent ?? "0").toInt(),
                 image: product.image ?? "",
+                // image: product.image != null
+                //     ? ApiConfig.productImage(product.image!)
+                //     : "",
                 outOfStock: (product.stock ?? 0) <= 0,
               );
             },
@@ -512,6 +520,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Categories(
                 id: item.id ?? 0,
                 image: item.image ?? "",
+                // image: item.image != null
+                //     ? ApiConfig.productImage(item.image!)
+                //     : "",
               ),
               );
             },

@@ -5,6 +5,7 @@ import '../../../models/cart_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
+
 class ProductCard extends StatelessWidget {
 
   final int id;
@@ -53,7 +54,7 @@ class ProductCard extends StatelessWidget {
                 height: 130,
                 width: double.infinity,
                 padding: const EdgeInsets.all(10),
-                child: Image.asset(image, fit: BoxFit.contain),
+                child: Image.network(image, fit: BoxFit.contain),
               ),
               Positioned(
                 top: 8,
@@ -130,6 +131,7 @@ class ProductCard extends StatelessWidget {
                         name: title,
                         price: price,
                         image: image,
+
                       );
 
                       await CartService.addToCart(item);

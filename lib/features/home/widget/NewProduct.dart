@@ -51,7 +51,7 @@ class NewProductCard extends StatelessWidget {
                 height: 130,
                 width: double.infinity,
                 padding: const EdgeInsets.all(10),
-                child: Image.asset(image, fit: BoxFit.contain),
+                child: Image.network(image, fit: BoxFit.contain),
               ),
               Positioned(
                 top: 8,
