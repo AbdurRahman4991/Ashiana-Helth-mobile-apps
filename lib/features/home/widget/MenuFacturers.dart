@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ashianahealth_mobile_app/main.dart';
 
 class Menufacturers extends StatelessWidget {
 
@@ -39,7 +41,16 @@ class Menufacturers extends StatelessWidget {
                 height: 100,
                 width: double.infinity,
                 padding: const EdgeInsets.all(10),
-                child: Image.network(image, fit: BoxFit.contain),
+                child:
+                //Image.network(image, fit: BoxFit.contain),
+                CachedNetworkImage(
+                  imageUrl: image,
+                  cacheManager: MyCacheManager.instance,
+                  memCacheWidth: 300,
+                  memCacheHeight: 300,
+                  fit: BoxFit.cover,
+                )
+
               ),
             ],
           ),

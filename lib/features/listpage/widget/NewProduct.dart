@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../models/product_model.dart';
 import '../../../models/cart_model.dart';
 import '../../../core/services/cart_service.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ashianahealth_mobile_app/main.dart';
 
 class NewProduct extends StatelessWidget {
   final Product product; // dynamic data
@@ -30,15 +32,47 @@ class NewProduct extends StatelessWidget {
           /// Product Image + Discount
           Stack(
             children: [
+              // Container(
+              //   width: 90,
+              //   height: 90,
+              //   padding: const EdgeInsets.all(8),
+              //   child: Image.network(
+              //     product.image.isNotEmpty
+              //         ? "https://demoapp.ashianahealth.com/storage/products/${product.image}"
+              //         : "https://via.placeholder.com/90",
+              //     fit: BoxFit.cover,
+              //   ),
+              // ),
               Container(
                 width: 90,
                 height: 90,
                 padding: const EdgeInsets.all(8),
-                child: Image.network(
-                  product.image.isNotEmpty
-                      ? "https://demoapp.ashianahealth.com/storage/products/${product.image}"
-                      : "https://via.placeholder.com/90",
-                  fit: BoxFit.cover,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: CachedNetworkImage(
+                    imageUrl: product.image.isNotEmpty
+                        ? "https://demoapp.ashianahealth.com/storage/products/${product.image}"
+                        : "https://via.placeholder.com/90",
+
+                    cacheManager: MyCacheManager.instance,
+                    fit: BoxFit.cover,
+
+                    memCacheWidth: 300,
+                    memCacheHeight: 300,
+
+                    // ✅ loading
+                    placeholder: (context, url) => Container(
+                      color: Colors.grey.shade300,
+                    ),
+
+                    // ✅ error fallback
+                    errorWidget: (context, url, error) => Image.asset(
+                      "assets/product.png",
+                      fit: BoxFit.cover,
+                    ),
+
+                    fadeInDuration: const Duration(milliseconds: 300),
+                  ),
                 ),
               ),
 

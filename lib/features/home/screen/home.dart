@@ -13,9 +13,9 @@ import '../../listpage/screens/TrendingProductList.dart';
 import '../../listpage/screens/MenufacturersList.dart';
 import '../../listpage/screens/NewProductListh.dart';
 import '../../listpage/screens/CategoryList.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import '../../../features/home/screen/search.dart';
-import '../../../config/api_config.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ashianahealth_mobile_app/main.dart';
 
 class HomeScreen extends StatefulWidget {
   
@@ -36,15 +36,55 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
   @override
+  // void initState() {
+  //   super.initState();
+  //  // loadUserId();
+  //
+  //
+  //   Future.microtask(() {
+  //     Provider.of<HomeProvider>(context, listen: false).getHomeData();
+  //   });
+  //
+  // }
+  @override
   void initState() {
     super.initState();
-   // loadUserId();
 
+    // Load data + preload images
+    Future.microtask(() async {
+      final provider = Provider.of<HomeProvider>(context, listen: false);
+      await provider.getHomeData(); // API call
 
-    Future.microtask(() {
-      Provider.of<HomeProvider>(context, listen: false).getHomeData();
+      // ✅ Preload Trending Products images
+      for (var product in provider.homeData?.data?.trendingProducts ?? []) {
+        if (product.image != null && product.image!.isNotEmpty) {
+          precacheImage(
+            CachedNetworkImageProvider(product.image!),
+            context,
+          );
+        }
+      }
+
+      // ✅ Preload New Products images
+      for (var product in provider.homeData?.data?.newProducts ?? []) {
+        if (product.image != null && product.image!.isNotEmpty) {
+          precacheImage(
+            CachedNetworkImageProvider(product.image!),
+            context,
+          );
+        }
+      }
+
+      // ✅ Preload Categories images
+      for (var category in provider.homeData?.data?.categories ?? []) {
+        if (category.image != null && category.image!.isNotEmpty) {
+          precacheImage(
+            CachedNetworkImageProvider(category.image!),
+            context,
+          );
+        }
+      }
     });
-    
   }
 
   /// 🔄 Scroll functions
@@ -79,7 +119,30 @@ class _HomeScreenState extends State<HomeScreen> {
     final provider = Provider.of<HomeProvider>(context);
      final sliders = provider.homeData?.data?.sliders ?? [];
 
-    return Scaffold(
+    return
+      WillPopScope(
+          onWillPop: () async {
+            // Alert dialog for exit
+            final exit = await showDialog<bool>(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: const Text('Exit App'),
+                content: const Text('Do you really want to exit the app?'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: const Text('No'),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(true),
+                    child: const Text('Yes'),
+                  ),
+                ],
+              ),
+            );
+            return exit ?? false; // if dialog dismissed, don't exit
+          },
+      child: Scaffold(
       appBar: const AppHeader(title: ""),
       endDrawer: const DrowerRight(),
       bottomNavigationBar: const CustomBottomNav(),
@@ -220,6 +283,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
+      )
       ),
     );
   }
@@ -232,20 +296,32 @@ class _HomeScreenState extends State<HomeScreen> {
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(12),
     ),
-    child: CachedNetworkImage(
+    child:
+    CachedNetworkImage(
       imageUrl: imageUrl,
+      cacheManager: MyCacheManager.instance,
+      memCacheWidth: 800, // reduce memory load
       placeholder: (context, url) => Container(
         color: Colors.grey.shade200,
         child: const Center(child: CircularProgressIndicator()),
       ),
-      errorWidget: (context, url, error) => Container(
-        color: Colors.grey.shade200,
-        child: const Icon(Icons.image_not_supported),
-      ),
+      errorWidget: (context, url, error) => const Icon(Icons.error),
       fit: BoxFit.cover,
-      width: double.infinity,
-      height: double.infinity,
-    ),
+    )
+    // CachedNetworkImage(
+    //   imageUrl: imageUrl,
+    //   placeholder: (context, url) => Container(
+    //     color: Colors.grey.shade200,
+    //     child: const Center(child: CircularProgressIndicator()),
+    //   ),
+    //   errorWidget: (context, url, error) => Container(
+    //     color: Colors.grey.shade200,
+    //     child: const Icon(Icons.image_not_supported),
+    //   ),
+    //   fit: BoxFit.cover,
+    //   width: double.infinity,
+    //   height: double.infinity,
+    // ),
   );
 }
 
@@ -274,9 +350,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 oldPrice: double.parse(product.sellingPrice ?? "0"),
                 discount: double.parse(product.discountPercent ?? "0").toInt(),
                 image: product.image ?? "",
-                // image: product.image != null
-                //     ? ApiConfig.productImage(product.image!)
-                //     : "",
                 outOfStock: (product.stock ?? 0) <= 0,
               );
             },
@@ -436,9 +509,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 oldPrice: double.parse(product.sellingPrice ?? "0"),
                 discount: double.parse(product.discountPercent ?? "0").toInt(),
                 image: product.image ?? "",
-                // image: product.image != null
-                //     ? ApiConfig.productImage(product.image!)
-                //     : "",
                 outOfStock: (product.stock ?? 0) <= 0,
               );
             },

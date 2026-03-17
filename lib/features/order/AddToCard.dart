@@ -7,6 +7,8 @@ import '../../../widget/common/TopNavigationBar.dart';
 import '../../../widget/common/drowerRight.dart';
 import '../../core/services/order_service.dart';
 import '../../core/services/cart_service.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ashianahealth_mobile_app/main.dart';
 
 class CartItem {
   String name;
@@ -166,18 +168,46 @@ class _BagPageState extends State<BagPage> {
                     padding: const EdgeInsets.all(12),
                     child: Row(
                       children: [
-                        // Image
-                        Image.network(
-                          item.image,
+                        //Image
+                        // Image.network(
+                        //   item.image,
+                        //   width: 60,
+                        //   height: 60,
+                        //   errorBuilder: (context, error, stackTrace) {
+                        //     return Image.asset(
+                        //       "assets/product.png",
+                        //       width: 60,
+                        //       height: 60,
+                        //     );
+                        //   },
+                        // ),
+                        CachedNetworkImage(
+                          imageUrl: (item.image != null && item.image!.isNotEmpty)
+                              ? item.image!
+                              : "https://via.placeholder.com/150",
+
+                          cacheManager: MyCacheManager.instance,
+
                           width: 60,
                           height: 60,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Image.asset(
-                              "assets/product.png",
-                              width: 60,
-                              height: 60,
-                            );
-                          },
+                          fit: BoxFit.cover,
+                          memCacheWidth: 200,
+                          memCacheHeight: 200,
+
+                          placeholder: (context, url) => Container(
+                            width: 60,
+                            height: 60,
+                            color: Colors.grey.shade300,
+                          ),
+
+                          fadeInDuration: const Duration(milliseconds: 300),
+
+                          errorWidget: (context, url, error) => Image.asset(
+                            "assets/product.png",
+                            width: 60,
+                            height: 60,
+                            fit: BoxFit.cover,
+                          ),
                         ),
 
                         const SizedBox(width: 10),

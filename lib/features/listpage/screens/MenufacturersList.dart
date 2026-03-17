@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../widget/Menufacturers.dart';
 import '../../../widget/common/bottom_navigation_bar.dart';
 import '../../../widget/common/TopNavigationBar.dart';
 import '../../../provider/product_provider.dart';

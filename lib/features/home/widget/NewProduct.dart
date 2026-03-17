@@ -3,6 +3,8 @@ import '../../../widget/common/add_to_bag_button.dart';
 import '../../../core/services/cart_service.dart';
 import '../../../models/cart_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ashianahealth_mobile_app/main.dart';
 
 class NewProductCard extends StatelessWidget {
   final int id;
@@ -51,7 +53,15 @@ class NewProductCard extends StatelessWidget {
                 height: 130,
                 width: double.infinity,
                 padding: const EdgeInsets.all(10),
-                child: Image.network(image, fit: BoxFit.contain),
+                child:
+                  //Image.network(image, fit: BoxFit.contain),
+                  CachedNetworkImage(
+                  imageUrl: image,
+                  cacheManager: MyCacheManager.instance,
+                  memCacheWidth: 300,
+                  memCacheHeight: 300,
+                  fit: BoxFit.cover,
+                )
               ),
               Positioned(
                 top: 8,

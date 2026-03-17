@@ -5,6 +5,8 @@ import '../../../core/services/cart_service.dart';
 import '../../../core/services/ cart_counter.dart';
 import '../../../models/cart_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ashianahealth_mobile_app/main.dart';
 
 
 class ProductCard extends StatelessWidget {
@@ -48,11 +50,39 @@ class ProductCard extends StatelessWidget {
           /// Image + Discount
           Stack(
             children: [
+              // Container(
+              //   width: 90,
+              //   height: 90,
+              //   padding: const EdgeInsets.all(8),
+              //   child: Image.network(image, fit: BoxFit.contain),
+              // ),
               Container(
                 width: 90,
                 height: 90,
                 padding: const EdgeInsets.all(8),
-                child: Image.network(image, fit: BoxFit.contain),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: CachedNetworkImage(
+                    imageUrl: image, // যেটা আগে network দিচ্ছিল
+                    cacheManager: MyCacheManager.instance,
+                    fit: BoxFit.contain,
+                    memCacheWidth: 300,
+                    memCacheHeight: 300,
+
+                    // loading placeholder
+                    placeholder: (context, url) => Container(
+                      color: Colors.grey.shade300,
+                    ),
+
+                    // error fallback
+                    errorWidget: (context, url, error) => Image.asset(
+                      "assets/product.png",
+                      fit: BoxFit.contain,
+                    ),
+
+                    fadeInDuration: const Duration(milliseconds: 300),
+                  ),
+                ),
               ),
 
               Positioned(

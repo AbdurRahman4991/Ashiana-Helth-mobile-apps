@@ -8,7 +8,8 @@ import '../../provider/invoice_provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:open_file/open_file.dart';
 import 'dart:io';
-import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ashianahealth_mobile_app/main.dart';
 
 class InvoicePage extends StatelessWidget {
   final int orderId; // Required to fetch order
@@ -189,15 +190,38 @@ class InvoicePage extends StatelessWidget {
           children: [
 
             /// Product Image
+            // Container(
+            //   width: 60,
+            //   height: 60,
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(8),
+            //     image: DecorationImage(
+            //       image: NetworkImage(
+            //           "https://demoapp.ashianahealth.com/storage/products/${item.product?.image ?? 'default.png'}"),
+            //       fit: BoxFit.cover,
+            //     ),
+            //   ),
+            // ),
             Container(
               width: 60,
               height: 60,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                image: DecorationImage(
-                  image: NetworkImage(
-                      "https://demoapp.ashianahealth.com/storage/products/${item.product?.image ?? 'default.png'}"),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: CachedNetworkImage(
+                  imageUrl:
+                  "https://demoapp.ashianahealth.com/storage/products/${item.product?.image ?? 'default.png'}",
+                  cacheManager: MyCacheManager.instance,
                   fit: BoxFit.cover,
+
+                  placeholder: (context, url) => Container(
+                    color: Colors.grey.shade300,
+                  ),
+
+                  errorWidget: (context, url, error) =>
+                      Image.asset("assets/product.png", fit: BoxFit.cover),
                 ),
               ),
             ),

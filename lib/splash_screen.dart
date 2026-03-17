@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'core/storage/local_storage.dart';
-import 'package:ashianahealth_mobile_app/main.dart';
 import 'features/home/screen/home.dart';
+import '../../../features/auth/screen/login_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

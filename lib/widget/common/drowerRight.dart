@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ashianahealth_mobile_app/main.dart';
+import '../../../features/auth/screen/login_page.dart';
 
 class DrowerRight extends StatefulWidget {
   const DrowerRight({super.key});
