@@ -270,44 +270,84 @@ class ProductCard extends StatelessWidget {
                 ),
 
                 /// Info
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 10),
+                //   child: Column(
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       Text(
+                //         title,
+                //         maxLines: 2,
+                //         overflow: TextOverflow.ellipsis,
+                //         style:
+                //             const TextStyle(fontWeight: FontWeight.bold),
+                //       ),
+                //       const SizedBox(height: 6),
+
+                //       Row(
+                //         children: [
+                //           Text(
+                //             "৳ $price",
+                //             style: const TextStyle(
+                //               fontWeight: FontWeight.bold,
+                //             ),
+                //           ),
+                //           const SizedBox(width: 6),
+                //           Text(
+                //             "৳ $oldPrice",
+                //             style: const TextStyle(
+                //               color: Colors.grey,
+                //               decoration:
+                //                   TextDecoration.lineThrough,
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+
+                //       const SizedBox(height: 8),
+                //     ],
+                //   ),
+                // ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style:
-                            const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 6),
+  padding: const EdgeInsets.symmetric(horizontal: 10),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
 
-                      Row(
-                        children: [
-                          Text(
-                            "৳ $price",
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(width: 6),
-                          Text(
-                            "৳ $oldPrice",
-                            style: const TextStyle(
-                              color: Colors.grey,
-                              decoration:
-                                  TextDecoration.lineThrough,
-                            ),
-                          ),
-                        ],
-                      ),
+      /// 🔥 FIXED TEXT AREA
+      SizedBox(
+        height: 40, // 🔥 fixed height for 2 lines
+        child: Text(
+          title,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 13,
+            height: 1.2,
+          ),
+        ),
+      ),
 
-                      const SizedBox(height: 8),
-                    ],
-                  ),
-                ),
+      const SizedBox(height: 6),
+
+      Row(
+        children: [
+          Text("৳ $price"),
+          const SizedBox(width: 6),
+          Text(
+            "৳ $oldPrice",
+            style: const TextStyle(
+              decoration: TextDecoration.lineThrough,
+            ),
+          ),
+        ],
+      ),
+
+      const SizedBox(height: 6),
+    ],
+  ),
+),
               ],
             ),
           ),

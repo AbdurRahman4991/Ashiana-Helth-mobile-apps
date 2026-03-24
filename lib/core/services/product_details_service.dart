@@ -46,7 +46,7 @@ class ProductDetailsService {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      return Product.fromJson(data);
+      return Product.fromJson(data['data']);
     } else {
       return null;
     }

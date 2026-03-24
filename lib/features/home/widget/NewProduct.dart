@@ -54,7 +54,6 @@ class NewProductCard extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(10),
                 child:
-                  //Image.network(image, fit: BoxFit.contain),
                   CachedNetworkImage(
                   imageUrl: image,
                   cacheManager: MyCacheManager.instance,
