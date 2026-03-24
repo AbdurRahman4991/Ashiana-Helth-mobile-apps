@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../widget/TrendingProduct.dart';
 import '../../../widget/common/bottom_navigation_bar.dart';
 import '../../../widget/common/TopNavigationBar.dart';
+import '../../../widget/common/drowerRight.dart';
 import '../../../provider/home_provider.dart';
 
 class TrendingProductListPage extends StatefulWidget {
@@ -58,7 +59,8 @@ class _TrendingProductListPageState extends State<TrendingProductListPage> {
     filteredProducts.isNotEmpty ? filteredProducts : trending;
 
     return Scaffold(
-      appBar: const AppHeader(title: "Trending Products"),
+      appBar: const AppHeader(title: ""),
+      endDrawer: const DrowerRight(),
       bottomNavigationBar: const CustomBottomNav(),
       backgroundColor: const Color(0xffF5F5F5),
       body: SafeArea(
@@ -103,11 +105,11 @@ class _TrendingProductListPageState extends State<TrendingProductListPage> {
               padding: EdgeInsets.symmetric(horizontal: 12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Icon(Icons.filter_alt_outlined, color: Colors.green),
-                  SizedBox(width: 10),
-                  Icon(Icons.list),
-                ],
+                // children: [
+                //   Icon(Icons.filter_alt_outlined, color: Colors.green),
+                //   SizedBox(width: 10),
+                //   Icon(Icons.list),
+                // ],
               ),
             ),
 

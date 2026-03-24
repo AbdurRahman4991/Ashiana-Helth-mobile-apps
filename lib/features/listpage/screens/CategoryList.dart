@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../widget/Categories.dart';
 import '../../../widget/common/bottom_navigation_bar.dart';
+import '../../../widget/common/drowerRight.dart';
 import '../../../widget/common/TopNavigationBar.dart';
 import '../../../provider/category_product_provider.dart';
 
@@ -19,6 +20,7 @@ class CategoriListPage extends StatefulWidget {
 }
 
 class _CategoriListPageState extends State<CategoriListPage> {
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -37,6 +39,7 @@ class _CategoriListPageState extends State<CategoriListPage> {
 
     return Scaffold(
       appBar: const AppHeader(title: ""),
+      endDrawer: const DrowerRight(),
       bottomNavigationBar: const CustomBottomNav(),
       backgroundColor: const Color(0xffF5F5F5),
 
@@ -61,19 +64,37 @@ class _CategoriListPageState extends State<CategoriListPage> {
               ),
               child: Row(
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
+                  // IconButton(
+                  //   icon: const Icon(Icons.arrow_back),
+                  //   onPressed: () {
+                  //     Navigator.pop(context);
+                  //   },
+                  // ),
 
                   const SizedBox(width: 5),
 
                   /// Search Field
-                  const Expanded(
+                  // const Expanded(
+                  //   child: TextField(
+                  //     decoration: InputDecoration(
+                  //       hintText: "Search by category",
+                  //       border: InputBorder.none,
+                  //     ),
+                  //   ),
+                  // ),
+                  Expanded(
                     child: TextField(
-                      decoration: InputDecoration(
+                      controller: searchController,
+                      onChanged: (value) {
+                        if (value.length >= 3) {
+                          Provider.of<CategoryProductProvider>(context, listen: false)
+                              .searchProducts(value, widget.categoriesId);
+                        } else if (value.isEmpty) {
+                          Provider.of<CategoryProductProvider>(context, listen: false)
+                              .fetchProducts(widget.categoriesId);
+                        }
+                      },
+                      decoration: const InputDecoration(
                         hintText: "Search by category",
                         border: InputBorder.none,
                       ),
@@ -88,11 +109,11 @@ class _CategoriListPageState extends State<CategoriListPage> {
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: const [
-                  Icon(Icons.filter_alt_outlined, color: Colors.green),
-                  SizedBox(width: 10),
-                  Icon(Icons.list),
-                ],
+                // children: const [
+                //   Icon(Icons.filter_alt_outlined, color: Colors.green),
+                //   SizedBox(width: 10),
+                //   Icon(Icons.list),
+                // ],
               ),
             ),
 

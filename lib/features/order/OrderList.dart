@@ -14,7 +14,7 @@ class OrdersPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
-      appBar: const AppHeader(title: "My Orders"),
+      appBar: const AppHeader(title: ""),
       endDrawer: const DrowerRight(),
       bottomNavigationBar: const CustomBottomNav(),
 

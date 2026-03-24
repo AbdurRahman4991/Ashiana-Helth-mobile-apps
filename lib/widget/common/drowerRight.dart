@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../features/auth/screen/login_page.dart';
+import '../../features/auth/screen/profile_edit.dart';
 
 class DrowerRight extends StatefulWidget {
   const DrowerRight({super.key});
@@ -70,6 +71,21 @@ class _DrowerRightState extends State<DrowerRight> {
                   builder: (context) => const LoginPage(),
                 ),
                     (route) => false,
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text("Profile Edit"),
+
+            onTap: () async {
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ProfileEdit(),
+                ),
+                    
               );
             },
           ),

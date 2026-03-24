@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../widget/NewProduct.dart';
 import '../../../widget/common/bottom_navigation_bar.dart';
+import '../../../widget/common/drowerRight.dart';
 import '../../../widget/common/TopNavigationBar.dart';
 import '../../../provider/new_product_provider.dart';
 
@@ -31,7 +32,8 @@ class _NewProductListPageState extends State<NewProductListPage> {
     final provider = Provider.of<NewProductProvider>(context);
 
     return Scaffold(
-      appBar: const AppHeader(title: "New Products"),
+      appBar: const AppHeader(title: ""),
+      endDrawer: const DrowerRight(),
       bottomNavigationBar: const CustomBottomNav(),
       backgroundColor: const Color(0xffF5F5F5),
       body: SafeArea(
