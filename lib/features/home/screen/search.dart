@@ -1,9 +1,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../../provider/search_provider.dart';
 import '../../listpage/widget/NewProduct.dart';
+import '../../../widget/common/bottom_navigation_bar.dart';
+import '../../../widget/common/TopNavigationBar.dart';
+import '../../../widget/common/drowerRight.dart';
 
 class SearchPage extends StatefulWidget {
   final String searchText;
@@ -34,6 +36,9 @@ class _SearchPageState extends State<SearchPage> {
     final provider = Provider.of<SearchProvider>(context);
 
     return Scaffold(
+     // appBar: const AppHeader(title: ""),
+      endDrawer: const DrowerRight(),
+      bottomNavigationBar: const CustomBottomNav(),
       appBar: AppBar(
         title: TextField(
           controller: controller,

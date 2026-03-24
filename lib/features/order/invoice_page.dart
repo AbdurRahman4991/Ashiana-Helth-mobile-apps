@@ -10,6 +10,10 @@ import 'package:open_file/open_file.dart';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ashianahealth_mobile_app/main.dart';
+import '../../../widget/common/bottom_navigation_bar.dart';
+import '../../../widget/common/TopNavigationBar.dart';
+import '../../../widget/common/drowerRight.dart';
+
 
 class InvoicePage extends StatelessWidget {
   final int orderId; // Required to fetch order
@@ -27,12 +31,9 @@ class InvoicePage extends StatelessWidget {
     provider.fetchOrder(orderId);
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
-      appBar: AppBar(
-        title: const Text("Invoice"),
-        centerTitle: true,
-        backgroundColor: Colors.green,
-      ),
+      appBar: const AppHeader(title: ""),
+      endDrawer: const DrowerRight(),
+      bottomNavigationBar: const CustomBottomNav(),
       body: Consumer<OrderDetailProvider>(
         builder: (context, provider, _) {
           if (provider.loading) {

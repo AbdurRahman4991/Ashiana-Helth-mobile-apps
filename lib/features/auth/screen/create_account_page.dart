@@ -207,32 +207,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                           ),
                         ),
 
-                        // onPressed: provider.loading ? null : () async {
-                        //     if (_formKey.currentState!.validate()) {
-                        //
-                        //       bool success = await provider.register(
-                        //         pharmacyName: pharmacyController.text,
-                        //         contactNo: mobileController.text,
-                        //         name: fullNameController.text,
-                        //         address: addressController.text,
-                        //         password: passwordController.text,
-                        //         roleId: "2",
-                        //         roleName: "User",
-                        //       );
-                        //
-                        //       if (success) {
-                        //         ScaffoldMessenger.of(context).showSnackBar(
-                        //           SnackBar(content: Text(provider.message)),
-                        //         );
-                        //
-                        //         // Navigate to Login Page
-                        //         Navigator.pushReplacement(
-                        //           context,
-                        //           MaterialPageRoute(builder: (context) => const LoginPage()),
-                        //         );
-                        //       }
-                        //     }
-                        //   },
+                       
                         onPressed: provider.loading ? null : () async {
                           if (_formKey.currentState!.validate()) {
 

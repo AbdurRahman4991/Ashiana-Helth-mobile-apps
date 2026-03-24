@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../widget/common/bottom_navigation_bar.dart';
+import '../../../widget/common/drowerRight.dart';
 import '../../../widget/common/TopNavigationBar.dart';
 import '../../../provider/product_provider.dart';
 
@@ -32,7 +33,8 @@ class _MenufacturersListPageState extends State<MenufacturersListPage> {
     final provider = Provider.of<ProductProvider>(context);
 
     return Scaffold(
-      appBar: const AppHeader(title: ""),
+      appBar: const AppHeader(title: "??"),
+      endDrawer: const DrowerRight(),
       bottomNavigationBar: const CustomBottomNav(),
       backgroundColor: const Color(0xffF5F5F5),
       body: SafeArea(
@@ -72,14 +74,14 @@ class _MenufacturersListPageState extends State<MenufacturersListPage> {
             /// Filter Row
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Icon(Icons.filter_alt_outlined, color: Colors.green),
-                  SizedBox(width: 10),
-                  Icon(Icons.list),
-                ],
-              ),
+              // child: Row(
+              //   mainAxisAlignment: MainAxisAlignment.end,
+              //   children: [
+              //     Icon(Icons.filter_alt_outlined, color: Colors.green),
+              //     SizedBox(width: 10),
+              //     Icon(Icons.list),
+              //   ],
+              // ),
             ),
 
             const SizedBox(height: 10),

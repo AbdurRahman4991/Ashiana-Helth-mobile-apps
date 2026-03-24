@@ -112,14 +112,13 @@ class _BagPageState extends State<BagPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const AppHeader(title: ""),
       backgroundColor: Colors.grey.shade200,
       endDrawer: const DrowerRight(),
       bottomNavigationBar: const CustomBottomNav(),
       body: Column(
         children: [
-          // AppHeader
-          const AppHeader(title: "My Bag"),
-
+          
           // Clear Bag Button
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

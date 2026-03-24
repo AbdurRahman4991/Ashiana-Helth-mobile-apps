@@ -54,6 +54,15 @@ class _HomeScreenState extends State<HomeScreen> {
     Future.microtask(() async {
       final provider = Provider.of<HomeProvider>(context, listen: false);
       await provider.getHomeData(); // API call
+      // ✅ Preload Slider images
+      for (var slider in provider.homeData?.data?.sliders ?? []) {
+        if (slider.image != null && slider.image!.isNotEmpty) {
+          precacheImage(
+            CachedNetworkImageProvider(slider.image!),
+            context,
+          );
+        }
+      }
 
       // ✅ Preload Trending Products images
       for (var product in provider.homeData?.data?.trendingProducts ?? []) {
@@ -201,6 +210,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         autoPlay: true,
                         enlargeCenterPage: true,
                         viewportFraction: 0.85,
+                        autoPlayInterval: Duration(seconds: 3),
+                        autoPlayAnimationDuration: Duration(milliseconds: 600),
+                        enableInfiniteScroll: sliders.length > 1,
                       ),
                       items: sliders.map((slider) {
                         return bannerItem(slider.image ?? "");
@@ -289,41 +301,70 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   /// 🔹 Banner Widget
+
   Widget bannerItem(String imageUrl) {
-  return Container(
-    margin: const EdgeInsets.symmetric(horizontal: 5),
-    clipBehavior: Clip.hardEdge,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child:
-    CachedNetworkImage(
-      imageUrl: imageUrl,
-      cacheManager: MyCacheManager.instance,
-      memCacheWidth: 800, // reduce memory load
-      placeholder: (context, url) => Container(
-        color: Colors.grey.shade200,
-        child: const Center(child: CircularProgressIndicator()),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 5),
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
       ),
-      errorWidget: (context, url, error) => const Icon(Icons.error),
-      fit: BoxFit.cover,
-    )
-    // CachedNetworkImage(
-    //   imageUrl: imageUrl,
-    //   placeholder: (context, url) => Container(
-    //     color: Colors.grey.shade200,
-    //     child: const Center(child: CircularProgressIndicator()),
-    //   ),
-    //   errorWidget: (context, url, error) => Container(
-    //     color: Colors.grey.shade200,
-    //     child: const Icon(Icons.image_not_supported),
-    //   ),
-    //   fit: BoxFit.cover,
-    //   width: double.infinity,
-    //   height: double.infinity,
-    // ),
-  );
-}
+      child: CachedNetworkImage(
+        imageUrl: imageUrl,
+        cacheManager: MyCacheManager.instance,
+
+        // 🔥 VERY IMPORTANT
+        memCacheWidth: 600, // কমাও (800 → 600)
+
+        fadeInDuration: const Duration(milliseconds: 200),
+
+        placeholder: (context, url) => Container(
+          color: Colors.grey.shade200,
+          child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+        ),
+
+        errorWidget: (context, url, error) =>
+        const Icon(Icons.image_not_supported),
+
+        fit: BoxFit.cover,
+      ),
+    );
+  }
+//   Widget bannerItem(String imageUrl) {
+//   return Container(
+//     margin: const EdgeInsets.symmetric(horizontal: 5),
+//     clipBehavior: Clip.hardEdge,
+//     decoration: BoxDecoration(
+//       borderRadius: BorderRadius.circular(12),
+//     ),
+//     child:
+//     CachedNetworkImage(
+//       imageUrl: imageUrl,
+//       cacheManager: MyCacheManager.instance,
+//       memCacheWidth: 800, // reduce memory load
+//       placeholder: (context, url) => Container(
+//         color: Colors.grey.shade200,
+//         child: const Center(child: CircularProgressIndicator()),
+//       ),
+//       errorWidget: (context, url, error) => const Icon(Icons.error),
+//       fit: BoxFit.cover,
+//     )
+//     // CachedNetworkImage(
+//     //   imageUrl: imageUrl,
+//     //   placeholder: (context, url) => Container(
+//     //     color: Colors.grey.shade200,
+//     //     child: const Center(child: CircularProgressIndicator()),
+//     //   ),
+//     //   errorWidget: (context, url, error) => Container(
+//     //     color: Colors.grey.shade200,
+//     //     child: const Icon(Icons.image_not_supported),
+//     //   ),
+//     //   fit: BoxFit.cover,
+//     //   width: double.infinity,
+//     //   height: double.infinity,
+//     // ),
+//   );
+// }
 
   /// 🔹 Trending Section (আগের মতো)
   ///

@@ -12,7 +12,10 @@ import 'provider/search_provider.dart';
 import 'core/services/cart_service.dart';
 import 'provider/order_detail_provider.dart';
 import 'provider/invoice_provider.dart';
+import 'provider/user_provider.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'provider/product_details_provider.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +32,9 @@ void main() async {
         ChangeNotifierProvider(create: (_) => SearchProvider()),
         ChangeNotifierProvider(create: (_) => OrderDetailProvider()),
         ChangeNotifierProvider(create: (_) => InvoiceProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => ProductDetailsProvider()),
+
       ],
       child: const MyApp(),
     ),
