@@ -154,7 +154,9 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
       appBar: const AppHeader(title: ""),
       endDrawer: const DrowerRight(),
-      bottomNavigationBar: const CustomBottomNav(),
+      //bottomNavigationBar: const CustomBottomNav(),
+          bottomNavigationBar: CustomBottomNav(currentIndex: 0),
+
       body: SafeArea(
         child: provider.isLoading
             ? const Center(child: CircularProgressIndicator())
@@ -330,41 +332,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-//   Widget bannerItem(String imageUrl) {
-//   return Container(
-//     margin: const EdgeInsets.symmetric(horizontal: 5),
-//     clipBehavior: Clip.hardEdge,
-//     decoration: BoxDecoration(
-//       borderRadius: BorderRadius.circular(12),
-//     ),
-//     child:
-//     CachedNetworkImage(
-//       imageUrl: imageUrl,
-//       cacheManager: MyCacheManager.instance,
-//       memCacheWidth: 800, // reduce memory load
-//       placeholder: (context, url) => Container(
-//         color: Colors.grey.shade200,
-//         child: const Center(child: CircularProgressIndicator()),
-//       ),
-//       errorWidget: (context, url, error) => const Icon(Icons.error),
-//       fit: BoxFit.cover,
-//     )
-//     // CachedNetworkImage(
-//     //   imageUrl: imageUrl,
-//     //   placeholder: (context, url) => Container(
-//     //     color: Colors.grey.shade200,
-//     //     child: const Center(child: CircularProgressIndicator()),
-//     //   ),
-//     //   errorWidget: (context, url, error) => Container(
-//     //     color: Colors.grey.shade200,
-//     //     child: const Icon(Icons.image_not_supported),
-//     //   ),
-//     //   fit: BoxFit.cover,
-//     //   width: double.infinity,
-//     //   height: double.infinity,
-//     // ),
-//   );
-// }
 
   /// 🔹 Trending Section (আগের মতো)
   ///

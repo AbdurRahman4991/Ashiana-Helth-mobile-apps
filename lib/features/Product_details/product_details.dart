@@ -180,7 +180,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     return Scaffold(
       appBar: const AppHeader(title: ""),
       endDrawer: const DrowerRight(),
-      bottomNavigationBar: const CustomBottomNav(),
+      bottomNavigationBar: const CustomBottomNav(currentIndex: 0),
 
       body: provider.isLoading
           ? const Center(child: CircularProgressIndicator())

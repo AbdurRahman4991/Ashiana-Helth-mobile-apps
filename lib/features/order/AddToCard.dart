@@ -115,7 +115,7 @@ class _BagPageState extends State<BagPage> {
       appBar: const AppHeader(title: ""),
       backgroundColor: Colors.grey.shade200,
       endDrawer: const DrowerRight(),
-      bottomNavigationBar: const CustomBottomNav(),
+      bottomNavigationBar: const CustomBottomNav(currentIndex: 2),
       body: Column(
         children: [
           

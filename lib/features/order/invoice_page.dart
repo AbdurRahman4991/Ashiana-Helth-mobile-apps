@@ -33,7 +33,7 @@ class InvoicePage extends StatelessWidget {
     return Scaffold(
       appBar: const AppHeader(title: ""),
       endDrawer: const DrowerRight(),
-      bottomNavigationBar: const CustomBottomNav(),
+      bottomNavigationBar: const CustomBottomNav(currentIndex: 1),
       body: Consumer<OrderDetailProvider>(
         builder: (context, provider, _) {
           if (provider.loading) {

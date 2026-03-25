@@ -34,7 +34,7 @@ class _NewProductListPageState extends State<NewProductListPage> {
     return Scaffold(
       appBar: const AppHeader(title: ""),
       endDrawer: const DrowerRight(),
-      bottomNavigationBar: const CustomBottomNav(),
+      bottomNavigationBar: const CustomBottomNav(currentIndex: 1),
       backgroundColor: const Color(0xffF5F5F5),
       body: SafeArea(
         child: provider.isLoading

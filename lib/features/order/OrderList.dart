@@ -16,7 +16,7 @@ class OrdersPage extends StatelessWidget {
       backgroundColor: Colors.grey.shade200,
       appBar: const AppHeader(title: ""),
       endDrawer: const DrowerRight(),
-      bottomNavigationBar: const CustomBottomNav(),
+      bottomNavigationBar: const CustomBottomNav(currentIndex: 3),
 
       body: FutureBuilder<List<OrderModel>>(
 

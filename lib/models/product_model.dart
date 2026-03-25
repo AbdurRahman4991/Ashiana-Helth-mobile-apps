@@ -99,7 +99,7 @@ class Product {
 
       // 🔥 FIX (important)
       discountedPrice:
-      double.tryParse(json['discount_price'].toString()) ?? 0,
+      double.tryParse(json['discounted_price'].toString()) ?? 0,
 
       discountPercent:
       double.tryParse(json['discount_percent']?.toString() ?? '0') ?? 0,

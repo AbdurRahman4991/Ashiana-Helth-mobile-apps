@@ -4,6 +4,7 @@ import '../../../widget/common/bottom_navigation_bar.dart';
 import '../../../widget/common/drowerRight.dart';
 import '../../../widget/common/TopNavigationBar.dart';
 import '../../../provider/product_provider.dart';
+import '../widget/Menufacturers.dart';
 
 
 class MenufacturersListPage extends StatefulWidget {
@@ -33,9 +34,9 @@ class _MenufacturersListPageState extends State<MenufacturersListPage> {
     final provider = Provider.of<ProductProvider>(context);
 
     return Scaffold(
-      appBar: const AppHeader(title: "??"),
+      appBar: const AppHeader(title: ""),
       endDrawer: const DrowerRight(),
-      bottomNavigationBar: const CustomBottomNav(),
+      bottomNavigationBar: const CustomBottomNav(currentIndex: 1),
       backgroundColor: const Color(0xffF5F5F5),
       body: SafeArea(
         child: Column(

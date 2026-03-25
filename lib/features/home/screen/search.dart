@@ -38,7 +38,8 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
      // appBar: const AppHeader(title: ""),
       endDrawer: const DrowerRight(),
-      bottomNavigationBar: const CustomBottomNav(),
+      bottomNavigationBar: const CustomBottomNav(currentIndex: 1),
+
       appBar: AppBar(
         title: TextField(
           controller: controller,

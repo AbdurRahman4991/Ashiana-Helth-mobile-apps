@@ -209,7 +209,8 @@ class _ProfileEditState extends State<ProfileEdit> {
     return Scaffold(
       appBar: const AppHeader(title: "Edit Profile"),
       endDrawer: const DrowerRight(),
-      bottomNavigationBar: const CustomBottomNav(),
+      //ottomNavigationBar: const CustomBottomNav(),
+      bottomNavigationBar: CustomBottomNav(currentIndex: 1),
       backgroundColor: const Color(0xffF5F5F5),
       body: provider.isLoading
           ? const Center(child: CircularProgressIndicator())
