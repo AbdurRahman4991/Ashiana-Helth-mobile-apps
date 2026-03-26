@@ -18,6 +18,7 @@ class ProductCard extends StatelessWidget {
   final int discount;
   final String image;
   final bool outOfStock;
+  
 
   const ProductCard({
     super.key,
@@ -155,43 +156,14 @@ class ProductCard extends StatelessWidget {
           ),
 
           /// 🔥 BUTTON AREA (NO NAVIGATION)
-          Padding(
+         Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: AddToBagButton(
+              productId: id,
+              name: title,
+              price: price,
+              image: image,
               outOfStock: outOfStock,
-              onPressed: () async {
-                SharedPreferences prefs =
-                    await SharedPreferences.getInstance();
-
-                String? userIdString = prefs.getString('id');
-
-                if (userIdString != null) {
-                  int userId = int.parse(userIdString);
-
-                  CartItem item = CartItem(
-                    userId: userId,
-                    productId: id,
-                    name: title,
-                    price: price,
-                    image: image,
-                  );
-
-                  await CartService.addToCart(item);
-
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Added to cart ✅"),
-                      duration: Duration(seconds: 1),
-                    ),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Please login first"),
-                    ),
-                  );
-                }
-              },
             ),
           ),
 

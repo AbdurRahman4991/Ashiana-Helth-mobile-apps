@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
 import '../../../provider/product_details_provider.dart';
 import '../../../widget/common/bottom_navigation_bar.dart';
 import '../../../widget/common/TopNavigationBar.dart';
 import '../../../widget/common/drowerRight.dart';
+import '../../../models/cart_model.dart';
+import '../../../core/services/cart_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../widget/common/add_to_bag_button.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   final int id;
+  final bool outOfStock;
 
-  const ProductDetailsPage({super.key, required this.id});
+  const ProductDetailsPage({super.key, required this.id, this.outOfStock = false,});
 
   @override
   State<ProductDetailsPage> createState() => _ProductDetailsPageState();
@@ -266,6 +270,12 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
                             const SizedBox(height: 20),
 
+                            // Positioned(
+                            //   left: 0,
+                            //   right: 0,
+                            //   bottom: 10,
+                            //   child: )
+
                             /// Price
                             Row(
                               mainAxisAlignment:
@@ -309,12 +319,21 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                   ],
                                 ),
 
-                                ElevatedButton(
-                                  onPressed: () {},
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.green),
-                                  child: const Text("Add To Bag"),
+                                SizedBox(
+                                  width: 120,
+                                  height: 40,
+                                  child: AddToBagButton(
+                                    productId: product.id,
+                                    name: product.name,
+                                    price: product.discountedPrice,
+                                    image: product.image,
+                                    outOfStock: widget.outOfStock,
+                                  ),
                                 ),
+
+            //                   
+
+                       
                               ],
                             ),
                           ],

@@ -181,7 +181,7 @@ import 'package:ashianahealth_mobile_app/main.dart';
 // 👉 details page import
 import '../../Product_details/product_details.dart';
 
-class ProductCard extends StatelessWidget {
+class ProductCardList extends StatelessWidget {
   final int id;
   final String title;
   final double price;
@@ -190,7 +190,7 @@ class ProductCard extends StatelessWidget {
   final String image;
   final bool outOfStock;
 
-  const ProductCard({
+  const ProductCardList({
     super.key,
     required this.id,
     required this.title,
@@ -311,45 +311,55 @@ class ProductCard extends StatelessWidget {
                   const SizedBox(height: 8),
 
                   /// 🛒 BUTTON (NO NAVIGATION)
-                  AddToBagButton(
-                    outOfStock: outOfStock,
-                    onPressed: () async {
+                  // AddToBagButton(
+                  //   outOfStock: outOfStock,
+                  //   onPressed: () async {
 
-                      SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                      String? userIdString = prefs.getString('id');
+                  //     SharedPreferences prefs =
+                  //     await SharedPreferences.getInstance();
+                  //     String? userIdString = prefs.getString('id');
 
-                      if (userIdString != null) {
-                        int userId = int.parse(userIdString);
+                  //     if (userIdString != null) {
+                  //       int userId = int.parse(userIdString);
 
-                        CartItem item = CartItem(
-                          userId: userId,
-                          productId: id,
-                          name: title,
-                          price: price,
-                          image: image,
-                        );
+                  //       CartItem item = CartItem(
+                  //         userId: userId,
+                  //         productId: id,
+                  //         name: title,
+                  //         price: price,
+                  //         image: image,
+                  //       );
 
-                        await CartService.addToCart(item);
+                  //       await CartService.addToCart(item);
 
-                        /// 🔥 cart counter update
-                        cartCounter.value++;
+                  //       /// 🔥 cart counter update
+                  //       cartCounter.value++;
 
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Added to Cart ✅"),
-                            duration: Duration(seconds: 1),
-                          ),
-                        );
+                  //       ScaffoldMessenger.of(context).showSnackBar(
+                  //         const SnackBar(
+                  //           content: Text("Added to Cart ✅"),
+                  //           duration: Duration(seconds: 1),
+                  //         ),
+                  //       );
 
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Please login first"),
-                          ),
-                        );
-                      }
-                    },
+                  //     } else {
+                  //       ScaffoldMessenger.of(context).showSnackBar(
+                  //         const SnackBar(
+                  //           content: Text("Please login first"),
+                  //         ),
+                  //       );
+                  //     }
+                  //   },
+                  // ),
+                   Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: AddToBagButton(
+                      productId: id,
+                      name: title,
+                      price: price,
+                      image: image,
+                      outOfStock: outOfStock,
+                    ),
                   ),
                 ],
               ),

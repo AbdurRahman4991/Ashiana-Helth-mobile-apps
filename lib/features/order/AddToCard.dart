@@ -265,6 +265,8 @@ class _BagPageState extends State<BagPage> {
                                               if (item.qty > 1) item.qty--;
                                             });
                                             await _saveCartItems(); // localstorage update
+                                            CartService.cartCount.value =
+                                            items.fold(0, (sum, item) => sum + item.qty);
                                           },
                                         ),
                                         Text("${item.qty}"),
@@ -275,6 +277,8 @@ class _BagPageState extends State<BagPage> {
                                               item.qty++;
                                             });
                                             await _saveCartItems(); // localstorage update
+                                            CartService.cartCount.value =
+                                            items.fold(0, (sum, item) => sum + item.qty);
                                           },
                                         ),
                                       ],
