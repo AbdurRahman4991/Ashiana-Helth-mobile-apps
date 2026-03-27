@@ -15,6 +15,9 @@ import 'provider/invoice_provider.dart';
 import 'provider/user_provider.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'provider/product_details_provider.dart';
+import 'provider/CategoryListProvider.dart';
+import 'provider/manufacturer_provider.dart';
+import 'provider/FilterProvider.dart';
 
 
 void main() async {
@@ -34,6 +37,9 @@ void main() async {
         ChangeNotifierProvider(create: (_) => InvoiceProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => ProductDetailsProvider()),
+        ChangeNotifierProvider(create: (_) => CategoryListProvider()),
+        ChangeNotifierProvider(create: (_) => ManufacturingProvider()),
+        ChangeNotifierProvider(create: (_) => FilterProvider()),
 
       ],
       child: const MyApp(),

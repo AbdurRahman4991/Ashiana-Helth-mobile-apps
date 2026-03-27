@@ -6,31 +6,6 @@ import '../../config/api_config.dart';
 
 class NewProductService {
 
-  // Future<List<Product>> fetchNewProducts({int page = 1}) async {
-  //
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String? token = prefs.getString("token"); // token নিলাম
-  //
-  //   print("User Token: $token"); // token console এ দেখাবে
-  //
-  //   final response = await http.get(
-  //     Uri.parse("${ApiConfig.baseUrl}/new/products?page=$page"),
-  //     headers: {
-  //       "Accept": "application/json",
-  //       if (token != null) "Authorization": "Bearer $token",
-  //     },
-  //   );
-  //
-  //   if (response.statusCode == 200) {
-  //     print(response.body); // debug
-  //     final data = jsonDecode(response.body);
-  //     List productsJson = data['data']['data'] ?? [];
-  //
-  //     return productsJson.map((e) => Product.fromJson(e)).toList();
-  //   } else {
-  //     throw Exception("Failed to load new products");
-  //   }
-  // }
   Future<List<Product>> fetchNewProducts({int page = 1}) async {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();

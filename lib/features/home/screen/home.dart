@@ -16,6 +16,7 @@ import '../../listpage/screens/CategoryList.dart';
 import '../../../features/home/screen/search.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ashianahealth_mobile_app/main.dart';
+import '../../../widget/common/FilterByCompanyCategory.dart';
 
 class HomeScreen extends StatefulWidget {
   
@@ -33,19 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _newProductController = ScrollController();
   final ScrollController _categoriesController = ScrollController();
 
-
-
-  @override
-  // void initState() {
-  //   super.initState();
-  //  // loadUserId();
-  //
-  //
-  //   Future.microtask(() {
-  //     Provider.of<HomeProvider>(context, listen: false).getHomeData();
-  //   });
-  //
-  // }
   @override
   void initState() {
     super.initState();
@@ -104,6 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
       curve: Curves.easeInOut,
     );
   }
+  
 
   void scrollRight(ScrollController controller) {
     controller.animateTo(
@@ -122,11 +111,24 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
+  void openFilter(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (context) {
+      return const FilterSheet();
+    },
+  );
+}
+
   @override
   Widget build(BuildContext context) {
 
     final provider = Provider.of<HomeProvider>(context);
-     final sliders = provider.homeData?.data?.sliders ?? [];
+    final sliders = provider.homeData?.data?.sliders ?? [];
 
     return
       WillPopScope(
@@ -154,8 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
       appBar: const AppHeader(title: ""),
       endDrawer: const DrowerRight(),
-      //bottomNavigationBar: const CustomBottomNav(),
-          bottomNavigationBar: CustomBottomNav(currentIndex: 0),
+      bottomNavigationBar: CustomBottomNav(currentIndex: 0),
 
       body: SafeArea(
         child: provider.isLoading
@@ -204,7 +205,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                     
-
                     /// 🎯 Dynamic Banner Slider
                     CarouselSlider(
                       options: CarouselOptions(
@@ -246,13 +246,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       Icons.factory,
                       "Manufacturers",
                       "Discover all",
-                      // onPressed: () {
-                      //   Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (_) => const MenufacturersListPage()),
-                      //   );
-                      // },
+                       onPressed: () => openFilter(context),
+                       // child: Text("Open Filter"),
                     ),
                     const SizedBox(height: 10),
                     manufacturerSection(_menufacturersController),
@@ -282,13 +277,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Icons.category,
                       "Categories",
                       "Discover all",
-                      // onPressed: () {
-                      //   Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (_) => const CategoriListPage()),
-                      //   );
-                      // },
+                      onPressed: () => openFilter(context),
                     ),
                     const SizedBox(height: 10),
                     categorySection(_categoriesController),
