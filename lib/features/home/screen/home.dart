@@ -19,7 +19,7 @@ import 'package:ashianahealth_mobile_app/main.dart';
 import '../../../widget/common/FilterByCompanyCategory.dart';
 
 class HomeScreen extends StatefulWidget {
-  
+
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
@@ -41,7 +41,10 @@ class _HomeScreenState extends State<HomeScreen> {
     // Load data + preload images
     Future.microtask(() async {
       final provider = Provider.of<HomeProvider>(context, listen: false);
-      await provider.getHomeData(); // API call
+     // await provider.getHomeData(); // API call
+      if (provider.homeData == null) {
+        await provider.getHomeData();
+      }
       // ✅ Preload Slider images
       for (var slider in provider.homeData?.data?.sliders ?? []) {
         if (slider.image != null && slider.image!.isNotEmpty) {
@@ -92,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
       curve: Curves.easeInOut,
     );
   }
-  
+
 
   void scrollRight(ScrollController controller) {
     controller.animateTo(
@@ -181,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             const Icon(Icons.search, color: Colors.green),
                             const SizedBox(width: 10),
                             Expanded(
-                              child: 
+                              child:
 
                             TextField(
                               decoration: const InputDecoration(
@@ -204,7 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                    
+
                     /// 🎯 Dynamic Banner Slider
                     CarouselSlider(
                       options: CarouselOptions(
@@ -340,7 +343,7 @@ class _HomeScreenState extends State<HomeScreen> {
             itemBuilder: (context, index) {
               final product = products[index];
               return ProductCard(
-                
+
                 id:product.id!,
                 title: product.name ?? "",
                 price: double.parse(product.discountedPrice ?? "0"),

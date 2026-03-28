@@ -18,6 +18,7 @@ import 'provider/product_details_provider.dart';
 import 'provider/CategoryListProvider.dart';
 import 'provider/manufacturer_provider.dart';
 import 'provider/FilterProvider.dart';
+import 'provider/TrendingProvider.dart';
 
 
 void main() async {
@@ -40,6 +41,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => CategoryListProvider()),
         ChangeNotifierProvider(create: (_) => ManufacturingProvider()),
         ChangeNotifierProvider(create: (_) => FilterProvider()),
+        ChangeNotifierProvider(create: (_) =>TrendingProvider()),
 
       ],
       child: const MyApp(),

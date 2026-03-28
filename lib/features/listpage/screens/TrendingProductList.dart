@@ -5,34 +5,52 @@ import '../widget/TrendingProduct.dart';
 import '../../../widget/common/bottom_navigation_bar.dart';
 import '../../../widget/common/TopNavigationBar.dart';
 import '../../../widget/common/drowerRight.dart';
-import '../../../provider/home_provider.dart';
+import '../../../provider/TrendingProvider.dart';
+
 
 class TrendingProductListPage extends StatefulWidget {
   const TrendingProductListPage({super.key});
 
   @override
-  State<TrendingProductListPage> createState() => _TrendingProductListPageState();
+  State<TrendingProductListPage> createState() =>
+      _TrendingProductListPageState();
 }
 
-class _TrendingProductListPageState extends State<TrendingProductListPage> {
-  TextEditingController searchController = TextEditingController();
+class _TrendingProductListPageState
+    extends State<TrendingProductListPage> {
+
+  final ScrollController _scrollController = ScrollController();
+  final TextEditingController searchController = TextEditingController();
+
   List filteredProducts = [];
 
   @override
   void initState() {
     super.initState();
-    // হোম ডেটা লোড করা
-    Future.microtask(() {
-      context.read<HomeProvider>().getHomeData();
+
+    final provider = context.read<TrendingProvider>();
+    if (provider.products.isEmpty) { // ✅ prevent multiple API call
+      provider.fetchTrending();
+    }
+    //provider.fetchTrending();
+
+    /// 🔥 Infinite Scroll Listener
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 200) {
+        provider.loadMore();
+      }
     });
   }
 
   @override
   void dispose() {
+    _scrollController.dispose();
     searchController.dispose();
     super.dispose();
   }
 
+  /// 🔍 Search Function
   void searchProduct(String query, List products) {
     if (query.isEmpty) {
       setState(() {
@@ -53,98 +71,84 @@ class _TrendingProductListPageState extends State<TrendingProductListPage> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<HomeProvider>();
-    final trending = provider.homeData?.data?.trendingProducts ?? [];
+    final provider = context.watch<TrendingProvider>();
+
     final productsToShow =
-    filteredProducts.isNotEmpty ? filteredProducts : trending;
+    filteredProducts.isNotEmpty ? filteredProducts : provider.products;
 
     return Scaffold(
       appBar: const AppHeader(title: ""),
       endDrawer: const DrowerRight(),
       bottomNavigationBar: const CustomBottomNav(currentIndex: 1),
       backgroundColor: const Color(0xffF5F5F5),
-      body: SafeArea(
-        child: Column(
-          children: [
-            /// Search Header
-            Container(
-              margin: const EdgeInsets.all(12),
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              height: 50,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.shade200,
-                    blurRadius: 5,
-                  )
-                ],
+
+      body: Column(
+        children: [
+
+          /// 🔍 Search Box
+          Container(
+            margin: const EdgeInsets.all(12),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            height: 50,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.shade200,
+                  blurRadius: 5,
+                )
+              ],
+            ),
+            child: TextField(
+              controller: searchController,
+              onChanged: (value) {
+                searchProduct(value, provider.products);
+              },
+              decoration: const InputDecoration(
+                hintText: "Search product",
+                border: InputBorder.none,
               ),
-              child: Row(
-                children: [
-                  const SizedBox(width: 5),
-                  Expanded(
-                    child: TextField(
-                      controller: searchController,
-                      onChanged: (value) {
-                        searchProduct(value, trending);
-                      },
-                      decoration: const InputDecoration(
-                        hintText: "Search by brand",
-                        border: InputBorder.none,
-                      ),
+            ),
+          ),
+
+          /// 🛒 Product List
+          Expanded(
+            child: provider.isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : productsToShow.isEmpty
+                ? const Center(child: Text("No products found"))
+                : ListView.builder(
+              controller: _scrollController,
+              itemCount: productsToShow.length +
+                  (provider.isLoadMore ? 1 : 0),
+              itemBuilder: (context, index) {
+
+                /// 🔄 Load More Loader
+                if (index == productsToShow.length) {
+                  return const Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Center(
+                      child: CircularProgressIndicator(),
                     ),
-                  ),
-                ],
-              ),
-            ),
-
-            /// Filter Row
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                // children: [
-                //   Icon(Icons.filter_alt_outlined, color: Colors.green),
-                //   SizedBox(width: 10),
-                //   Icon(Icons.list),
-                // ],
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            /// Product List
-            Expanded(
-              child: provider.isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : productsToShow.isEmpty
-                  ? const Center(child: Text("No products found"))
-                  : ListView.builder(
-                itemCount: productsToShow.length,
-                itemBuilder: (context, index) {
-                  final product = productsToShow[index];
-
-                  return ProductCardList(
-                    id:product.id!,
-                    title: product.name ?? "",
-                    image: product.image ?? "",
-                    price:
-                    double.tryParse(product.sellingPrice ?? "0") ??
-                        0,
-                    oldPrice: double.tryParse(
-                        product.discountedPrice ?? "0") ??
-                        0,
-                    discount: double.parse(
-                        product.discountPercent ?? "0")
-                        .toInt(),
                   );
-                },
-              ),
+                }
+
+                final product = productsToShow[index];
+
+                return ProductCardList(
+                  id: product.id,
+                  title: product.name ?? "",
+                  image: product.image ?? "",
+                  price: product.sellingPrice ?? 0,
+                  oldPrice: product.discountedPrice ?? 0,
+                  discount:
+                  (product.discountPercent ?? 0).toInt(),
+                );
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

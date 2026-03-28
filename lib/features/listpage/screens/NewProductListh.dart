@@ -24,10 +24,12 @@ class _NewProductListPageState extends State<NewProductListPage> {
     final provider =
         Provider.of<NewProductProvider>(context, listen: false);
 
-    Future.microtask(() {
+    // Future.microtask(() {
+    //   provider.fetchNewProducts();
+    // });
+    if (provider.products.isEmpty) { // ✅ prevent duplicate call
       provider.fetchNewProducts();
-    });
-
+    }
     /// 🔥 Scroll Listener
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
@@ -83,39 +85,3 @@ class _NewProductListPageState extends State<NewProductListPage> {
   }
 }
 
-// class _NewProductListPageState extends State<NewProductListPage> {
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     Future.microtask(() {
-//       Provider.of<NewProductProvider>(context, listen: false)
-//           .fetchNewProducts();
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-
-//     final provider = Provider.of<NewProductProvider>(context);
-
-//     return Scaffold(
-//       appBar: const AppHeader(title: ""),
-//       endDrawer: const DrowerRight(),
-//       bottomNavigationBar: const CustomBottomNav(currentIndex: 1),
-//       backgroundColor: const Color(0xffF5F5F5),
-//       body: SafeArea(
-//         child: provider.isLoading
-//             ? const Center(child: CircularProgressIndicator())
-//             : provider.products.isEmpty
-//             ? const Center(child: Text("No new products found"))
-//             : ListView.builder(
-//           itemCount: provider.products.length,
-//           itemBuilder: (context, index) {
-//             return NewProduct(product: provider.products[index]);
-//           },
-//         ),
-//       ),
-//     );
-//   }
-// }

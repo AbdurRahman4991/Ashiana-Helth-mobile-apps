@@ -10,10 +10,16 @@ class CategoryListProvider extends ChangeNotifier {
   bool isLoading = false;
 
   Future<void> loadCategories() async {
+    if (categories.isNotEmpty) return; // 🔥 already loaded হলে skip
+
     isLoading = true;
     notifyListeners();
 
-    categories = await _service.fetchCategories();
+    try {
+      categories = await _service.fetchCategories();
+    } catch (e) {
+      print(e);
+    }
 
     isLoading = false;
     notifyListeners();

@@ -9,10 +9,16 @@ class ManufacturingProvider extends ChangeNotifier {
   bool isLoading = false;
 
   Future<void> loadCompanies() async {
+    if (companies.isNotEmpty) return; // 🔥 already loaded হলে skip
+
     isLoading = true;
     notifyListeners();
 
-    companies = await _service.fetchCompanies();
+    try {
+      companies = await _service.fetchCompanies();
+    } catch (e) {
+      print(e);
+    }
 
     isLoading = false;
     notifyListeners();
