@@ -327,77 +327,155 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// 🔹 Trending Section (আগের মতো)
   ///
+  // Widget trendingProductSection(ScrollController controller) {
+  //   final provider = Provider.of<HomeProvider>(context);
+  //   final products = provider.homeData?.data?.trendingProducts ?? [];
+
+  //   return SizedBox(
+  //     height: 270,
+  //     child: Stack(
+  //       children: [
+  //         ListView.builder(
+  //           controller: controller,
+  //           scrollDirection: Axis.horizontal,
+  //           padding: const EdgeInsets.symmetric(horizontal: 50), // arrow এর জন্য space
+  //           itemCount: products.length,
+  //           itemBuilder: (context, index) {
+  //             final product = products[index];
+  //             return ProductCard(
+
+  //               id:product.id!,
+  //               title: product.name ?? "",
+  //               price: double.parse(product.discountedPrice ?? "0"),
+  //               oldPrice: double.parse(product.sellingPrice ?? "0"),
+  //               discount: double.parse(product.discountPercent ?? "0").toInt(),
+  //               image: product.image ?? "",
+  //               outOfStock: (product.stock ?? 0) <= 0,
+  //             );
+  //           },
+  //         ),
+
+  //         /// ⬅ Left Arrow
+  //         Positioned(
+  //           left: 0,
+  //           top: 0,
+  //           bottom: 0,
+  //           child: Center(
+  //             child: IconButton(
+  //               icon: const Icon(Icons.arrow_back_ios),
+  //               color: Colors.green,
+  //               onPressed: () {
+  //                 controller.animateTo(
+  //                   controller.offset - 220, // scroll distance
+  //                   duration: const Duration(milliseconds: 300),
+  //                   curve: Curves.easeInOut,
+  //                 );
+  //               },
+  //             ),
+  //           ),
+  //         ),
+
+  //         /// ➡ Right Arrow
+  //         Positioned(
+  //           right: 0,
+  //           top: 0,
+  //           bottom: 0,
+  //           child: Center(
+  //             child: IconButton(
+  //               icon: const Icon(Icons.arrow_forward_ios),
+  //               color: Colors.green,
+  //               onPressed: () {
+  //                 controller.animateTo(
+  //                   controller.offset + 220,
+  //                   duration: const Duration(milliseconds: 300),
+  //                   curve: Curves.easeInOut,
+  //                 );
+  //               },
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
   Widget trendingProductSection(ScrollController controller) {
-    final provider = Provider.of<HomeProvider>(context);
-    final products = provider.homeData?.data?.trendingProducts ?? [];
+  final provider = Provider.of<HomeProvider>(context);
+  final products = provider.homeData?.data?.trendingProducts ?? [];
 
-    return SizedBox(
-      height: 270,
-      child: Stack(
-        children: [
-          ListView.builder(
-            controller: controller,
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 50), // arrow এর জন্য space
-            itemCount: products.length,
-            itemBuilder: (context, index) {
-              final product = products[index];
-              return ProductCard(
+  return SizedBox(
+    height: 270,
+    child: Stack(
+      children: [
 
-                id:product.id!,
-                title: product.name ?? "",
-                price: double.parse(product.discountedPrice ?? "0"),
-                oldPrice: double.parse(product.sellingPrice ?? "0"),
-                discount: double.parse(product.discountPercent ?? "0").toInt(),
-                image: product.image ?? "",
-                outOfStock: (product.stock ?? 0) <= 0,
-              );
-            },
-          ),
+        /// 🔥 Product List
+        ListView.builder(
+          controller: controller,
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 16), // ✅ FIXED
+          itemCount: products.length,
+          itemBuilder: (context, index) {
+            final product = products[index];
+            return ProductCard(
+              id: product.id!,
+              title: product.name ?? "",
+              price: double.parse(product.discountedPrice ?? "0"),
+              oldPrice: double.parse(product.sellingPrice ?? "0"),
+              discount: double.parse(product.discountPercent ?? "0").toInt(),
+              image: product.image ?? "",
+              outOfStock: (product.stock ?? 0) <= 0,
+            );
+          },
+        ),
 
-          /// ⬅ Left Arrow
-          Positioned(
-            left: 0,
-            top: 0,
-            bottom: 0,
-            child: Center(
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back_ios),
-                color: Colors.green,
-                onPressed: () {
-                  controller.animateTo(
-                    controller.offset - 220, // scroll distance
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  );
-                },
-              ),
+        /// ⬅ Left Arrow (floating circle)
+        Positioned(
+          left: 4,
+          top: 0,
+          bottom: 0,
+          child: Center(
+            child: _arrowButton(
+              icon: Icons.arrow_back_ios,
+              onTap: () => scrollLeft(controller),
             ),
           ),
+        ),
 
-          /// ➡ Right Arrow
-          Positioned(
-            right: 0,
-            top: 0,
-            bottom: 0,
-            child: Center(
-              child: IconButton(
-                icon: const Icon(Icons.arrow_forward_ios),
-                color: Colors.green,
-                onPressed: () {
-                  controller.animateTo(
-                    controller.offset + 220,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  );
-                },
-              ),
+        /// ➡ Right Arrow
+        Positioned(
+          right: 4,
+          top: 0,
+          bottom: 0,
+          child: Center(
+            child: _arrowButton(
+              icon: Icons.arrow_forward_ios,
+              onTap: () => scrollRight(controller),
             ),
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _arrowButton({required IconData icon, required VoidCallback onTap}) {
+  return Container(
+    decoration: BoxDecoration(
+      color: Colors.white,
+      shape: BoxShape.circle,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black12,
+          blurRadius: 6,
+        )
+      ],
+    ),
+    child: IconButton(
+      icon: Icon(icon, size: 18),
+      onPressed: onTap,
+    ),
+  );
+}
 
 
   /// 🔹 Manufacturer Section
