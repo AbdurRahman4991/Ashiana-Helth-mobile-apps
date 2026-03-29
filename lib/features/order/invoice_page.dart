@@ -135,7 +135,7 @@ class InvoicePage extends StatelessWidget {
                         },
                         child: provider.isLoading
                             ? const CircularProgressIndicator(color: Colors.white)
-                            : const Text("Download Invoice"),
+                            : const Text("Download Invoice", style: TextStyle(color:Colors.white)),
                       );
                     },
                   ),

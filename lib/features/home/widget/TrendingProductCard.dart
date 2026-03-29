@@ -156,14 +156,29 @@ class ProductCard extends StatelessWidget {
           ),
 
           /// 🔥 BUTTON AREA (NO NAVIGATION)
-         Padding(
+         // Padding(
+         //    padding: const EdgeInsets.symmetric(horizontal: 10),
+         //    child: AddToBagButton(
+         //      productId: id,
+         //      name: title,
+         //      price: price,
+         //      image: image,
+         //      outOfStock: outOfStock,
+         //    ),
+         //  ),
+          Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: AddToBagButton(
-              productId: id,
-              name: title,
-              price: price,
-              image: image,
-              outOfStock: outOfStock,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AddToBagButton(
+                  productId: id,
+                  name: title,
+                  price: price,
+                  image: image,
+                  outOfStock: outOfStock,
+                ),
+              ],
             ),
           ),
 

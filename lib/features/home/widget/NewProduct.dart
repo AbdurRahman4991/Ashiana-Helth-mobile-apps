@@ -350,14 +350,26 @@ class NewProductCard extends StatelessWidget {
           //     },
           //   ),
           // ),
-           Padding(
+          //  Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 10),
+          //   child: AddToBagButton(
+          //     productId: id,
+          //     name: title,
+          //     price: price,
+          //     image: image,
+          //     outOfStock: outOfStock,
+          //   ),
+          // ),
+          Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: AddToBagButton(
-              productId: id,
-              name: title,
-              price: price,
-              image: image,
-              outOfStock: outOfStock,
+            child: Center(
+              child: AddToBagButton(
+                productId: id,
+                name: title,
+                price: price,
+                image: image,
+                outOfStock: outOfStock,
+              ),
             ),
           ),
 
