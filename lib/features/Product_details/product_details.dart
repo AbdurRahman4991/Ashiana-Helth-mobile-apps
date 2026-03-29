@@ -5,10 +5,8 @@ import '../../../provider/product_details_provider.dart';
 import '../../../widget/common/bottom_navigation_bar.dart';
 import '../../../widget/common/TopNavigationBar.dart';
 import '../../../widget/common/drowerRight.dart';
-import '../../../models/cart_model.dart';
-import '../../../core/services/cart_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../widget/common/add_to_bag_button.dart';
+import '../../models/product_model.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   final int id;
@@ -34,6 +32,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           .getProduct(widget.id);
     });
   }
+
 
   void scrollLeft(ScrollController controller) {
     controller.animateTo(
@@ -132,49 +131,138 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   }
 
   /// 🔥 Section Builder
+  
   Widget buildSection({
-    required String title,
-    required ScrollController controller,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 10),
-        Text(title,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 130,
-          child: Stack(
-            children: [
-              ListView.builder(
-                controller: controller,
-                scrollDirection: Axis.horizontal,
-                itemCount: 5,
-                itemBuilder: (context, index) => productCard(),
-              ),
-              Positioned(
-                left: 0,
-                top: 40,
-                child: IconButton(
-                  icon: const Icon(Icons.chevron_left),
-                  onPressed: () => scrollLeft(controller),
-                ),
-              ),
-              Positioned(
-                right: 0,
-                top: 40,
-                child: IconButton(
-                  icon: const Icon(Icons.chevron_right),
-                  onPressed: () => scrollRight(controller),
-                ),
-              ),
-            ],
-          ),
+  required String title,
+  required ScrollController controller,
+  required List<Product> products,
+}) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const SizedBox(height: 10),
+      Text(title,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+      const SizedBox(height: 10),
+      SizedBox(
+        height: 130,
+        child: Stack(
+          children: [
+            ListView.builder(
+              controller: controller,
+              scrollDirection: Axis.horizontal,
+              itemCount: products.length,
+              itemBuilder: (context, index) {
+  final item = products[index];
+
+  return GestureDetector(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => ProductDetailsPage(id: item.id),
         ),
-      ],
-    );
-  }
+      );
+    },
+    child: Container(
+      width: 200,
+      margin: const EdgeInsets.only(right: 10),
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        children: [
+          CachedNetworkImage(
+            imageUrl: item.image,
+            width: 60,
+            height: 60,
+            fit: BoxFit.cover,
+          ),
+          const SizedBox(width: 10),
+
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+
+                Text(
+                  item.manufactureName ?? "",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 11, color: Colors.grey),
+                ),
+
+                const SizedBox(height: 4),
+
+                Text(
+                  item.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                      fontSize: 13, fontWeight: FontWeight.bold),
+                ),
+
+                const SizedBox(height: 4),
+
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        "৳${item.discountedPrice}",
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    Flexible(
+                      child: Text(
+                        "৳${item.sellingPrice}",
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          decoration: TextDecoration.lineThrough,
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+            ),
+
+            /// arrows
+            Positioned(
+              left: 0,
+              top: 40,
+              child: IconButton(
+                icon: const Icon(Icons.chevron_left),
+                onPressed: () => scrollLeft(controller),
+              ),
+            ),
+            Positioned(
+              right: 0,
+              top: 40,
+              child: IconButton(
+                icon: const Icon(Icons.chevron_right),
+                onPressed: () => scrollRight(controller),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -261,11 +349,13 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             buildSection(
                               title: "Alternative Brands",
                               controller: _altScrollController,
+                              products: provider.alternativeBrands,
                             ),
 
-                            buildSection(
+                           buildSection(
                               title: "Recommended for you",
                               controller: _recScrollController,
+                              products: provider.recommendedProducts,
                             ),
 
                             const SizedBox(height: 20),
@@ -330,10 +420,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                     outOfStock: widget.outOfStock,
                                   ),
                                 ),
-
-            //                   
-
-                       
                               ],
                             ),
                           ],

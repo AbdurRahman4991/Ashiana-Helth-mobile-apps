@@ -75,7 +75,7 @@ class _DrowerRightState extends State<DrowerRight> {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.logout),
+            leading: const Icon(Icons.edit),
             title: const Text("Profile Edit"),
 
             onTap: () async {
