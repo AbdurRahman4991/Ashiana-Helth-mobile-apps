@@ -1,3 +1,4 @@
+import 'package:ashianahealth_mobile_app/features/auth/screen/forget_password.dart';
 import 'package:flutter/material.dart';
 import '../../../provider/login_provider.dart';
 import '../../../features/auth/screen/create_account_page.dart';
@@ -175,7 +176,11 @@ class _LoginPageState extends State<LoginPage> {
                         const Spacer(),
 
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(context,
+                            MaterialPageRoute(builder: (_)  => ForgetPasswordPage())
+                            );
+                          },
                           child: const Text("Forgot Password?"),
                         )
                       ],

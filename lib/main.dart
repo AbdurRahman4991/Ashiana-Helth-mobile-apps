@@ -19,6 +19,7 @@ import 'provider/CategoryListProvider.dart';
 import 'provider/manufacturer_provider.dart';
 import 'provider/FilterProvider.dart';
 import 'provider/TrendingProvider.dart';
+import 'provider/reset_password_provider.dart';
 
 
 void main() async {
@@ -42,6 +43,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ManufacturingProvider()),
         ChangeNotifierProvider(create: (_) => FilterProvider()),
         ChangeNotifierProvider(create: (_) =>TrendingProvider()),
+        ChangeNotifierProvider(create: (_) =>ResetPasswordProvider()),
 
       ],
       child: const MyApp(),
