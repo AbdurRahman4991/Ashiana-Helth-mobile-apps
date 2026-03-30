@@ -214,12 +214,31 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 16), // spacing between search and banner
 
                     /// 🔹 Banner Slider
+                    // CarouselSlider(
+                    //   options: CarouselOptions(
+                    //     height: 160,
+                    //     autoPlay: sliders.length > 1,
+                    //     enlargeCenterPage: true,
+                    //     viewportFraction: 0.85,
+                    //     autoPlayInterval: const Duration(seconds: 3),
+                    //     autoPlayAnimationDuration: const Duration(milliseconds: 600),
+                    //     enableInfiniteScroll: sliders.length > 1,
+                    //     pauseAutoPlayOnTouch: true,
+                    //     scrollPhysics: const BouncingScrollPhysics(),
+                    //   ),
+                    //   items: sliders.map((slider) {
+                    //     return ClipRRect(
+                    //       borderRadius: BorderRadius.circular(12),
+                    //       child: bannerItem(slider.image ?? ""),
+                    //     );
+                    //   }).toList(),
+                    // ),
                     CarouselSlider(
                       options: CarouselOptions(
-                        height: 160,
+                        height: 160, // চাইলে MediaQuery দিয়ে dynamic height দিতে পারো
                         autoPlay: sliders.length > 1,
-                        enlargeCenterPage: true,
-                        viewportFraction: 0.85,
+                        enlargeCenterPage: false, // enlarge করার দরকার নেই
+                        viewportFraction: 1.0, // পুরো স্ক্রিন
                         autoPlayInterval: const Duration(seconds: 3),
                         autoPlayAnimationDuration: const Duration(milliseconds: 600),
                         enableInfiniteScroll: sliders.length > 1,
@@ -228,7 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       items: sliders.map((slider) {
                         return ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(0), // চাইলে 0 বা কিছু radius দিতে পারো
                           child: bannerItem(slider.image ?? ""),
                         );
                       }).toList(),

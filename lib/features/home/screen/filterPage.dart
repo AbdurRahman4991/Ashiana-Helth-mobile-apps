@@ -78,7 +78,7 @@ class _FilterPageState extends State<FilterPage> {
 
     return Scaffold(
       endDrawer: const DrowerRight(),
-      bottomNavigationBar: const CustomBottomNav(currentIndex: 0),
+      bottomNavigationBar: const CustomBottomNav(currentIndex: 1),
 
       /// 🔍 Search Bar
       appBar: AppBar(
