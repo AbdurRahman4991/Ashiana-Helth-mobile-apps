@@ -123,12 +123,14 @@ class Manufacturer {
 class Category {
   int? id;
   String? image;
+  String? name;
 
-  Category({this.id, this.image});
+  Category({this.id, this.image, this.name});
 
   Category.fromJson(Map<String, dynamic> json) {
     //id = json['id'];
     id = int.parse(json['id'].toString());
     image = json['image'];
+    name = json['name'];
   }
 }

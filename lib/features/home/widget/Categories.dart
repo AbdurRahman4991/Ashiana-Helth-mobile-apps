@@ -5,11 +5,13 @@ import 'package:ashianahealth_mobile_app/main.dart';
 class Categories extends StatelessWidget {
   final int id;
   final String image;
+  final String name;
 
   const Categories({
     super.key,
     required this.id,
     required this.image,
+    required this.name,
   });
 
   @override
@@ -49,6 +51,7 @@ class Categories extends StatelessWidget {
                   fit: BoxFit.cover,
                 )
               ),
+              
             ],
           ),
         ],

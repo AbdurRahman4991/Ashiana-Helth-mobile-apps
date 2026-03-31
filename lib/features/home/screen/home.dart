@@ -728,6 +728,7 @@ Widget _arrowButton({required IconData icon, required VoidCallback onTap}) {
                         child: Categories(
                           id: categories[firstIndex].id ?? 0,
                           image: categories[firstIndex].image ?? "",
+                          name: categories[firstIndex].name ?? "",
                         ),
                       ),
                     ),
@@ -750,6 +751,7 @@ Widget _arrowButton({required IconData icon, required VoidCallback onTap}) {
                         child: Categories(
                           id: categories[secondIndex].id ?? 0,
                           image: categories[secondIndex].image ?? "",
+                          name: categories[secondIndex].name ?? "",
                         ),
                       )
                           : const SizedBox(),
