@@ -20,6 +20,9 @@ import 'provider/manufacturer_provider.dart';
 import 'provider/FilterProvider.dart';
 import 'provider/TrendingProvider.dart';
 import 'provider/reset_password_provider.dart';
+import 'provider/forget_provider.dart';
+import 'provider/change_password_provider.dart';
+import 'provider/otp_provider.dart';
 
 
 void main() async {
@@ -44,6 +47,10 @@ void main() async {
         ChangeNotifierProvider(create: (_) => FilterProvider()),
         ChangeNotifierProvider(create: (_) =>TrendingProvider()),
         ChangeNotifierProvider(create: (_) =>ResetPasswordProvider()),
+        ChangeNotifierProvider(create: (_) => ForgetProvider()),
+        ChangeNotifierProvider(create: (_) => ChangePasswordProvider()),
+        ChangeNotifierProvider(create: (_) => OtpProvider()),
+
 
       ],
       child: const MyApp(),
