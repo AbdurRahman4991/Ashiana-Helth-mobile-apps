@@ -1,14 +1,15 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../../config/api_config.dart';
 
 class OtpService {
-  static const String baseUrl = "http://192.168.20.203:8000/api";
 
   /// Send OTP
   static Future<Map<String, dynamic>> sendOtp(String phone) async {
     try {
       final response = await http.post(
-        Uri.parse("$baseUrl/auth/send-otp"),
+        Uri.parse("${ApiConfig.baseUrl}/auth/send-otp"),
+
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/json",
@@ -31,7 +32,7 @@ class OtpService {
   static Future<Map<String, dynamic>> verifyOtp(String phone, String otp) async {
     try {
       final response = await http.post(
-        Uri.parse("$baseUrl/auth/verify-otp"),
+        Uri.parse("${ApiConfig.baseUrl}/auth/verify-otp"),
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/json",

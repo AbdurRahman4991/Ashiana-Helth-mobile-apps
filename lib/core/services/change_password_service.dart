@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../../config/api_config.dart';
 
 class ChangePasswordService {
-  static const String baseUrl = "http://192.168.20.203:8000/api/auth";
 
   /// Reset Password API call
   Future<Map<String, dynamic>> resetPassword({
@@ -13,7 +13,7 @@ class ChangePasswordService {
   }) async {
     try {
       final response = await http.post(
-        Uri.parse("$baseUrl/reset-password"),
+        Uri.parse("${ApiConfig.baseUrl}/auth/reset-password"),
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/json",
